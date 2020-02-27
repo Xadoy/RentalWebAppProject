@@ -1,17 +1,20 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import queryString from 'query-string';
 
 class App extends React.Component {
     render() {
         return (
             <Router>
                 <div className={"App"}>
-                    <Navigation/>
+                    <NavBar/>
                     <Switch>
                         <Route path={"/"} exact strict component={Home} />
                         <Route path={"/catalogue"} exact strict component={Catalogue} />
                         <Route path={"/about"} exact strict component={About} />
+                        <Route path={"/item/:item_id"} exact strict component={ItemPage} />
+                        <Route path={"/search"} component={SearchResults} />
                     </Switch>
                 </div>
             </Router>
@@ -19,7 +22,7 @@ class App extends React.Component {
     }
 }
 
-class Navigation extends React.Component {
+class NavBar extends React.Component {
     render() {
         return (
             <nav>
@@ -35,14 +38,49 @@ class Navigation extends React.Component {
 }
 
 
+class SearchBar extends React.Component {
+    render() {
+        return (
+            <div>
+                <form action={"search"}>
+                    <input type={"text"} name={"value"} defaultValue={"Item/Service"}/>
+                    <input type={"submit"} value={"Search"}/>
+                </form>
+            </div>
+        )
+    }
+}
+
+class SearchResults extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            search_val : 'null'
+        }
+    }
+
+    componentDidMount() {
+        const { location: { search } } = this.props;
+        const values = queryString.parse(search);
+        this.setState({search_val : values["value"]});
+    }
+
+    render() {
+        return (
+            <div>
+                <SearchBar/>
+                You searched for {this.state.search_val}
+            </div>
+        )
+    }
+}
+
 class Home extends React.Component {
     render() {
         return (
             <div>
-                <form>
-                    <input type={"text"} id={"search"} name={"search"} value={"Item/Service"}/>
-                    <input type={"submit"} value={"Search"}/>
-                </form>
+                <h1> Words </h1>
+                <SearchBar/>
             </div>
         )
     }
@@ -52,6 +90,7 @@ class Catalogue extends React.Component {
     render() {
         return (
             <div>
+                <SearchBar/>
                 Catalogue page
             </div>
         )
@@ -68,9 +107,65 @@ class About extends React.Component {
     }
 }
 
+class ItemPage extends React.Component {
+    render() {
+        return (
+            <div>
+                <SearchBar/>
+                Current item: {this.props.match.params.item_id}
+                <ItemPictureDisplay/>
+                <ItemDescriptionPanel/>
+                <ItemCommentPanel/>
+                <ItemOrderPanel/>
+            </div>
+        )
+    }
+}
+
+class ItemPictureDisplay extends React.Component {
+    render() {
+        return (
+            <div>
+                Images
+            </div>
+        );
+    }
+}
+
+class ItemDescriptionPanel extends React.Component {
+    render() {
+        return (
+            <div>
+                Description
+            </div>
+        );
+    }
+}
+
+class ItemCommentPanel extends React.Component {
+    render() {
+        return (
+            <div>
+                Comments
+            </div>
+        );
+    }
+}
+
+class ItemOrderPanel extends React.Component {
+    render() {
+        return (
+            <div>
+                Order
+            </div>
+        );
+    }
+}
+
 function login() {
     return 0;
 }
 
 
 export default App;
+
