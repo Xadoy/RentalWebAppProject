@@ -3,7 +3,25 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import queryString from 'query-string';
 
+/* ###################################################################################################################
+
+Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
+then import them to here. Feel free to delete/change the components, this shit scuffed.
+
+Check list:
+
+Homepage (sign in/register popup)               - unfinished
+Catalogue                                       - unfinished
+Item page                                       - unfinished
+User profile                                    - unfinished
+Admin page                                      - unfinished
+
+#################################################################################################################### */
+
 class App extends React.Component {
+
+    // I'd like to keep all the link router here
+
     render() {
         return (
             <Router>
@@ -23,6 +41,10 @@ class App extends React.Component {
 }
 
 class NavBar extends React.Component {
+
+    // The sign in button does nothing
+    // The onClick function, login, needs to be implemented
+
     render() {
         return (
             <nav>
@@ -79,7 +101,7 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <h1> Words </h1>
+                <h1> notKJJ </h1>
                 <SearchBar/>
             </div>
         )
@@ -166,6 +188,4 @@ function login() {
     return 0;
 }
 
-
 export default App;
-
