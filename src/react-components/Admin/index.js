@@ -1,29 +1,52 @@
 import React from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  withStyles,
+  makeStyles
+} from "@material-ui/core";
 
 import "./styles.css";
 
-/* Component for the Home page */
-class Sidebar extends React.Component {
-  render() {
-    const { options, selected, onClickHandler } = this.props;
-    return (
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    maxWidth: 240,
+    height: "100%",
+    backgroundColor: theme.palette.background.paper,
+    position: "fixed"
+  }
+}));
+
+const StyledListItem = withStyles({
+  root: {
+    "&$selected": {
+      backgroundColor: "red"
+    }
+  },
+  selected: {}
+})(ListItem);
+
+function Sidebar({ options, selected, onClickHandler }) {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
       <List disablePadding dense>
         {options.map((option, index) => (
-          <ListItem
+          <StyledListItem
             button
             key={option}
             selected={selected === index}
             onClick={() => onClickHandler(index)}
+            className={{ selected: classes.mui }}
           >
             <ListItemText>{option}</ListItemText>
-          </ListItem>
+          </StyledListItem>
         ))}
       </List>
-    );
-  }
+    </div>
+  );
 }
 
 class Admin extends React.Component {
@@ -39,17 +62,18 @@ class Admin extends React.Component {
   };
 
   render() {
+    const currentView = this.state.options[this.state.selected];
     return (
       <div>
-        <div className="sidebar">
-          <Sidebar
-            options={this.state.options}
-            selected={this.state.selected}
-            onClickHandler={this.handleListItemClick}
-          />
-        </div>
+        <Sidebar
+          options={this.state.options}
+          selected={this.state.selected}
+          onClickHandler={this.handleListItemClick}
+        />
 
-        <div className="admin_panel">test</div>
+        <div className="admin_panel">
+          <div>{currentView}</div>
+        </div>
       </div>
     );
   }
