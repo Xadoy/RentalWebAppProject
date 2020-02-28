@@ -14,6 +14,7 @@ class Sidebar extends React.Component {
         {options.map((option, index) => (
           <ListItem
             button
+            key={option}
             selected={selected === index}
             onClick={() => onClickHandler(index)}
           >
