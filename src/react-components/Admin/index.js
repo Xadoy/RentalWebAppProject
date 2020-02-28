@@ -49,6 +49,43 @@ function Sidebar({ options, selected, onClickHandler }) {
   );
 }
 
+class ManageView extends React.Component {
+  render() {
+    return <div>ManageView</div>;
+  }
+}
+class ListingsView extends React.Component {
+  render() {
+    return <div>ListingsView</div>;
+  }
+}
+class UserManagementView extends React.Component {
+  render() {
+    return <div>UserManagementView</div>;
+  }
+}
+class RequestsView extends React.Component {
+  render() {
+    return <div>RequestsView</div>;
+  }
+}
+
+function AdminPanel({ view }) {
+  switch (view) {
+    default:
+      return null;
+
+    case "Manage":
+      return <ManageView />;
+    case "Listings":
+      return <ListingsView />;
+    case "User Management":
+      return <UserManagementView />;
+    case "Requests":
+      return <RequestsView />;
+  }
+}
+
 class Admin extends React.Component {
   state = {
     options: ["Manage", "Listings", "User Management", "Requests"],
@@ -70,9 +107,8 @@ class Admin extends React.Component {
           selected={this.state.selected}
           onClickHandler={this.handleListItemClick}
         />
-
         <div className="admin_panel">
-          <div>{currentView}</div>
+          <AdminPanel view={currentView} />
         </div>
       </div>
     );
