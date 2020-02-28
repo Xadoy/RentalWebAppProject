@@ -5,6 +5,8 @@ class About extends React.Component {
         return (
             <div>
                 About page
+
+                This is so cool man
             </div>
         )
     }

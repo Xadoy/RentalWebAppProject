@@ -6,11 +6,11 @@ class Home extends React.Component {
     render() {
         return (
             <div className='main'>
-                <h1> notKJJ </h1>
+                <h1> notKIJIJI </h1>
                 <SearchBar/>
                 {/* <Browse/> */}
             </div>
-            
+
         )
     }
 }
