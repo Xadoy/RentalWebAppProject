@@ -12,6 +12,9 @@ class Pics extends React.Component {
     componentDidMount() {
         this.setState({curr_img: apple})
     }
+
+    // TODO remove these image displays later
+
     render() {
         return (
             <div className={'display-container'}>
