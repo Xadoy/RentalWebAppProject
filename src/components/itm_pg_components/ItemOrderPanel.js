@@ -19,17 +19,15 @@ class Order extends React.Component {
     render() {
         return (
             <div className={"order-container"}>
-                <div>
-                    Order
-                </div>
-                <div>
+                <p>
+                    Order<br/>
                     Daily cost: ${this.state.cost}
-                </div>
+                </p>
                 <form id={"date-form"}>
                     <label htmlFor="time">Start: </label>
-                    <input id="start" name="time" type="date"/><br/>
+                    <input id="start" name="time" type="date" min={this.get_today()}/><br/>
                     <label htmlFor="time">End: </label>
-                    <input id="end" name="time" type="date"/><br/>
+                    <input id="end" name="time" type="date" min={this.get_today()}/><br/>
                     <input type="submit" value={"Calculate cost"} onClick={() => this.setState({days: this.find_days()})}/>
                     <input type="reset"/>
                 </form>
@@ -51,6 +49,15 @@ class Order extends React.Component {
     purchase() {
         console.log('Transaction made');
         console.log(this.state.cost*this.state.days);
+    }
+
+    // from stack overflow
+    get_today() {
+        let today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        return yyyy + '-' + mm + '-' + dd
     }
 }
 

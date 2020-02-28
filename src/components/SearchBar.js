@@ -5,7 +5,7 @@ class SearchBar extends React.Component {
         return (
             <div>
                 <form action={"search"}>
-                    <input type={"text"} name={"value"} defaultValue={"Item/Service"}/>
+                    <input type={"text"} name={"value"} placeholder={"Item/Service"}/>
                     <input type={"submit"} value={"Search"}/>
                 </form>
             </div>
