@@ -21,3 +21,39 @@ nav {
   align-items: center;
   list-style: none;
 }
+
+.img-button {
+  position: relative;
+  width: 50%;
+}
+
+.icon-display {
+  height: 50px;
+  width: 50px;
+  border-radius: 10%;
+}
+
+.behind-img {
+  background-color: transparent;
+  position: relative;
+  top: -54px;
+  padding: 24px;
+  border-radius: 10%;
+}
+
+.image-choice {
+  margin-left: 35%;
+  list-style: none;
+}
+
+.large-img-display {
+  height: 200px;
+  width: 200px;
+  border-radius: 10px;
+}
+
+.display-container {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
