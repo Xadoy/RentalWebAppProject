@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
+import Popup from "../react-components/Home"
+
 class NavBar extends React.Component {
 
     // The sign in button does nothing
