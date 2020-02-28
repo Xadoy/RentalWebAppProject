@@ -18,7 +18,7 @@ class Pics extends React.Component {
     render() {
         return (
             <div className={'display-container'}>
-                <u1 className={"image-choice"}>
+                <ul className={"image-choice"}>
                     <li>
                         <div className={"img-button"}>
                             <img className={'icon-display'} src={apple} alt={"apple"}/>
@@ -29,7 +29,7 @@ class Pics extends React.Component {
                             <button className={'behind-img'} onClick={() => this.setState({curr_img: apple2})}/>
                         </div>
                     </li>
-                </u1>
+                </ul>
                 <img className={'large-img-display'} src={this.state.curr_img} alt={"item_image"}/>
             </div>
         );

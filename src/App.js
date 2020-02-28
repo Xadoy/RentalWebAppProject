@@ -8,10 +8,6 @@ import Catalogue from "./components/CataloguePage";
 import Home from "./react-components/Home";
 import NavBar from "./components/NavigationBar";
 import Admin from "./react-components/Admin";
-
-import { createBrowserHistory } from "history";
-
-const history = createBrowserHistory();
 /* ###################################################################################################################
 
 Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
@@ -30,11 +26,11 @@ Admin page                                      - unfinished
 class App extends React.Component {
   // I'd like to keep all the link routing here
   render() {
+    const notInAdmin = /^(?!.*(\/admin)).*$/;
     return (
       <Router>
         <div className={"App"}>
-          {history.location.pathname !== "/admin" && <NavBar />}
-
+          <Route path={notInAdmin} component={NavBar} />
           <Switch>
             <Route path={"/"} exact strict component={Home} />
             <Route path={"/catalogue"} exact strict component={Catalogue} />
