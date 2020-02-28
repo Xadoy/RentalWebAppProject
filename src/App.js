@@ -7,6 +7,7 @@ import About from "./components/AboutPage";
 import Catalogue from "./components/CataloguePage";
 import Home from "./components/HomePage";
 import NavBar from "./components/NavigationBar";
+import Admin from './react-components/Admin';
 
 /* ###################################################################################################################
 
@@ -38,6 +39,7 @@ class App extends React.Component {
                         <Route path={"/about"} exact strict component={About} />
                         <Route path={"/item/:item_id"} exact strict component={Item} />
                         <Route path={"/search"} component={SearchResults} />
+                        <Route path={"/admin"} exact strict render={() => (<Admin />)} />
                     </Switch>
                 </div>
             </Router>
