@@ -42,18 +42,47 @@ nav {
 }
 
 .image-choice {
-  margin-left: 35%;
+  margin-left: 38%;
   list-style: none;
 }
 
 .large-img-display {
-  height: 200px;
-  width: 200px;
+  max-height: 250px;
+  max-width: 250px;
   border-radius: 10px;
 }
 
 .display-container {
   display: flex;
   width: 100%;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: silver;
+}
+
+.order-container {
+  float: right;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 37%;
+  background-color: coral;
+  height: 280px;
+}
+
+.desc-container {
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 63%;
+  min-height: 130px;
+  background-color: cornflowerblue;
+}
+
+.comment-container {
+  float: left;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 63%;
+  min-height: 130px;
+  background-color: darkgreen;
 }

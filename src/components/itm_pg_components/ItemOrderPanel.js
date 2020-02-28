@@ -1,12 +1,51 @@
 import React from "react";
 
 class Order extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            cost: 5,
+            days: 0
+        }
+    }
+    componentDidMount() {
+        let form = document.getElementById("date-form");
+        function handle_submit(e) {
+            e.preventDefault();
+        }
+        form.addEventListener('submit', handle_submit);
+    }
     render() {
         return (
-            <div>
-                Order
+            <div className={"order-container"}>
+                <div>
+                    Order
+                </div>
+                <div>
+                    Daily cost: ${this.state.cost}
+                </div>
+                <form id={"date-form"}>
+                    <label htmlFor="time">Start: </label>
+                    <input id="start" name="time" type="date"/><br/>
+                    <label htmlFor="time">End: </label>
+                    <input id="end" name="time" type="date"/><br/>
+                    <input type="submit" value={"Calculate cost"} onClick={() => this.setState({days: this.find_days()})}/>
+                    <input type="reset"/>
+                </form>
+                <div>
+                    ${this.state.cost * this.state.days}
+                </div>
+                <button onClick={console.log("order made")}>
+                    Confirm Order
+                </button>
             </div>
         );
+    }
+    find_days() {
+        const start = Date.parse(document.getElementById("end").value);
+        const end = Date.parse(document.getElementById("start").value);
+        const milli_in_day = 1000*60*60*24;
+        return (end - start) / milli_in_day
     }
 }
 

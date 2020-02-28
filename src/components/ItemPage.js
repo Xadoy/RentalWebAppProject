@@ -10,9 +10,11 @@ class Item extends React.Component {
             <div>
                 Current item: {this.props.match.params.item_id}
                 <Pics/>
-                <Desc/>
-                <Comments/>
-                <Order/>
+                <Order className={'panel-config'}/>
+                <div className={'panel-config'}>
+                    <Desc/>
+                    <Comments/>
+                </div>
             </div>
         )
     }
