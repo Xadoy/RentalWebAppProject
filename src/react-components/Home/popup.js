@@ -6,11 +6,12 @@ class Popup extends React.Component {
     return (  
     <div className='popup'>  
         <div className='popup_inner'>  
-            <form action={"login"}>
+            {/* <form action={"login"}>
                         <input type={"text"} name={"user"} placeholder={"Username"}/>
                         <input type={"text"} name={"pass"} placeholder={"Password"}/>
                         <input type={"submit"} value={"Login"}/>
-            </form>
+            </form> */}
+            <h1>Login stuff</h1>
             <div>
                 <button onClick={this.props.closePopup}>close</button> 
             </div> 

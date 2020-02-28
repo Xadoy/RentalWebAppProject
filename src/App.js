@@ -39,6 +39,7 @@ class App extends React.Component {
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
+          
         </div>
       </Router>
     );
