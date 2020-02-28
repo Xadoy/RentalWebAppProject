@@ -6,7 +6,8 @@ class Order extends React.Component {
         this.state = {
             cost: 5,
             days: 0
-        }
+        };
+        this.purchase = this.purchase.bind(this);
     }
     componentDidMount() {
         let form = document.getElementById("date-form");
@@ -35,17 +36,21 @@ class Order extends React.Component {
                 <div>
                     ${this.state.cost * this.state.days}
                 </div>
-                <button onClick={console.log("order made")}>
+                <button onClick={this.purchase}>
                     Confirm Order
                 </button>
             </div>
         );
     }
     find_days() {
-        const start = Date.parse(document.getElementById("end").value);
-        const end = Date.parse(document.getElementById("start").value);
+        const end = Date.parse(document.getElementById("end").value);
+        const start = Date.parse(document.getElementById("start").value);
         const milli_in_day = 1000*60*60*24;
         return (end - start) / milli_in_day
+    }
+    purchase() {
+        console.log('Transaction made');
+        console.log(this.state.cost*this.state.days);
     }
 }
 
