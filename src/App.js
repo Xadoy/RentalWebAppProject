@@ -3,6 +3,8 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import queryString from 'query-string';
 
+import Admin from './react-components/Admin';
+
 /* ###################################################################################################################
 
 Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
@@ -26,14 +28,20 @@ class App extends React.Component {
         return (
             <Router>
                 <div className={"App"}>
-                    <NavBar/>
-                    <Switch>
-                        <Route path={"/"} exact strict component={Home} />
-                        <Route path={"/catalogue"} exact strict component={Catalogue} />
-                        <Route path={"/about"} exact strict component={About} />
-                        <Route path={"/item/:item_id"} exact strict component={ItemPage} />
-                        <Route path={"/search"} component={SearchResults} />
-                    </Switch>
+                <Switch>
+                    <Route path={"/admin"} exact strict render={() => 
+                                (<Admin />)} />
+                    <Route>
+                        <NavBar/>
+                        <Switch>
+                            <Route path={"/"} exact strict component={Home} />
+                            <Route path={"/catalogue"} exact strict component={Catalogue} />
+                            <Route path={"/about"} exact strict component={About} />
+                            <Route path={"/item/:item_id"} exact strict component={ItemPage} />
+                            <Route path={"/search"} component={SearchResults} />
+                        </Switch>
+                    </Route>
+                </Switch>
                 </div>
             </Router>
         );
@@ -53,6 +61,13 @@ class NavBar extends React.Component {
                     <li><Link to={"/catalogue"}>Browse</Link></li>
                     <li><Link to={"/about"}>About</Link></li>
                     <li><button onClick={login}>Sign-in</button></li>
+                    {/* TODO: temporary entry point of admin page
+                    once sign-in pop-up is finished, this should be changed*/}
+                    <li>
+                        <Link to={"/admin"}>
+                            <button onClick={login}>Admin</button>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         )
