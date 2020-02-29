@@ -24,7 +24,7 @@ class NavBar extends React.Component {
                     once sign-in pop-up is finished, this should be changed*/}
                     <li>
                         <Link to={"/admin"}>
-                            <button onClick={this.login}>Admin</button>
+                            <button onClick={this.login.bind(this)}>Admin</button>
                         </Link>
                     </li>
                 </ul>
