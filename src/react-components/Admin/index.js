@@ -50,7 +50,6 @@ function Sidebar({ options, selected, onClickHandler }) {
             key={option}
             selected={selected === index}
             onClick={() => onClickHandler(index)}
-            className={{ selected: classes.mui }}
           >
             <ListItemText>{option}</ListItemText>
           </StyledListItem>
