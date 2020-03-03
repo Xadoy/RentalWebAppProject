@@ -8,6 +8,8 @@ import Catalogue from "./components/CataloguePage";
 import Home from "./react-components/Home";
 import NavBar from "./components/NavigationBar";
 import Admin from "./react-components/Admin";
+
+import Popup from "./popup.js";
 /* ###################################################################################################################
 
 Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
@@ -25,6 +27,15 @@ Admin page                                      - unfinished
 
 class App extends React.Component {
   // I'd like to keep all the link routing here
+  constructor(props){  
+    super(props);  
+    this.state = { showPopup: false };  
+    }
+   login() {
+        this.setState({  
+            showPopup: !this.state.showPopup  
+       });  
+    }
   render() {
     const notInAdmin = /^(?!.*(\/admin)).*$/;
     return (
@@ -39,11 +50,14 @@ class App extends React.Component {
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
+            <button onClick={this.login.bind(this)}>Sign-in</button>
+            {this.state.showPopup ?  <Popup closePopup={this.login.bind(this)}/> : null}  
           
         </div>
       </Router>
     );
   }
+  
 }
 
 export default App;
