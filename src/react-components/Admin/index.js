@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     maxWidth: 240,
     height: "100%",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "black",
+    color: "gray",
     position: "fixed"
   }
 }));
@@ -24,10 +25,18 @@ const useStyles = makeStyles(theme => ({
 const StyledListItem = withStyles({
   root: {
     "&$selected": {
-      backgroundColor: "red"
+      backgroundColor: "#5a7a9e",
+      color: "white"
+    },
+    "&:hover": {
+      backgroundColor: "#5a7a9e!important",
+      color: "white"
     }
   },
-  selected: {}
+  selected: {
+    backgroundColor: "red",
+    color: "red",
+  }
 })(ListItem);
 
 function Sidebar({ options, selected, onClickHandler }) {
