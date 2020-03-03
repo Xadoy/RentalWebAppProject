@@ -4,6 +4,8 @@ import {
   ListItem,
   ListItemText,
   withStyles,
+  Grid,
+  Paper,
   makeStyles
 } from "@material-ui/core";
 
@@ -54,11 +56,43 @@ class ManageView extends React.Component {
     return <div>ManageView</div>;
   }
 }
+
+function FormRow() {
+  return (
+    <>
+      <Grid item xs={4}>
+        <Paper>item</Paper>
+      </Grid>
+      <Grid item xs={4}>
+        <Paper>item</Paper>
+      </Grid>
+      <Grid item xs={4}>
+        <Paper>item</Paper>
+      </Grid>
+    </>
+  );
+}
 class ListingsView extends React.Component {
   render() {
-    return <div>ListingsView</div>;
+    return (
+      <>
+        <div>ListingsView</div>
+        <Grid container spacing={1}>
+          <Grid container item xs={12} spacing={3}>
+            <FormRow />
+          </Grid>
+          <Grid container item xs={12} spacing={3}>
+            <FormRow />
+          </Grid>
+          <Grid container item xs={12} spacing={3}>
+            <FormRow />
+          </Grid>
+        </Grid>
+      </>
+    );
   }
 }
+
 class UserManagementView extends React.Component {
   render() {
     return <div>UserManagementView</div>;
@@ -70,19 +104,17 @@ class RequestsView extends React.Component {
   }
 }
 
-function AdminPanel({ view }) {
-  switch (view) {
-    default:
-      return null;
-
-    case "Manage":
-      return <ManageView />;
-    case "Listings":
-      return <ListingsView />;
-    case "User Management":
-      return <UserManagementView />;
-    case "Requests":
-      return <RequestsView />;
+class AdminPanel extends React.Component {
+  render() {
+    const {view} = this.props;
+    return (
+      <>
+        {view === 'Manage' && <ManageView />}
+        {view === 'Listings' && <ListingsView />}
+        {view === 'User Management' && <UserManagementView />}
+        {view === 'Requests' && <RequestsView />}
+      </>
+      );
   }
 }
 
@@ -101,7 +133,7 @@ class Admin extends React.Component {
   render() {
     const currentView = this.state.options[this.state.selected];
     return (
-      <div>
+      <>
         <Sidebar
           options={this.state.options}
           selected={this.state.selected}
@@ -110,7 +142,7 @@ class Admin extends React.Component {
         <div className="admin_panel">
           <AdminPanel view={currentView} />
         </div>
-      </div>
+      </>
     );
   }
 }
