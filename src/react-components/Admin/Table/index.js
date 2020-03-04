@@ -8,14 +8,23 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button
+  Button,
+  withStyles
 } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650
+    minWidth: 650,
+    backgroundColor: "#000044"
   }
 });
+
+const StyledCell = withStyles(theme => ({
+  root: {
+    color: "white"
+  }
+}))(TableCell);
+
 
 export function ListingsTable({ rows, removeListing }) {
   const classes = useStyles();
@@ -25,24 +34,24 @@ export function ListingsTable({ rows, removeListing }) {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Items</TableCell>
-            <TableCell align="right">Total Owned</TableCell>
-            <TableCell align="right">Rented Out</TableCell>
-            <TableCell align="right">In Stock</TableCell>
-            <TableCell align="right">Due</TableCell>
+            <StyledCell>Items</StyledCell>
+            <StyledCell align="right">Total Owned</StyledCell>
+            <StyledCell align="right">Rented Out</StyledCell>
+            <StyledCell align="right">In Stock</StyledCell>
+            <StyledCell align="right">Due</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
             <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
+              <StyledCell component="th" scope="row">
                 {row.name}
-              </TableCell>
-              <TableCell align="right">{row.total_num}</TableCell>
-              <TableCell align="right">{row.rent_num}</TableCell>
-              <TableCell align="right">{row.stock_num}</TableCell>
-              <TableCell align="right">{row.due_num}</TableCell>
-              <TableCell align="right">
+              </StyledCell>
+              <StyledCell align="right">{row.total_num}</StyledCell>
+              <StyledCell align="right">{row.rent_num}</StyledCell>
+              <StyledCell align="right">{row.stock_num}</StyledCell>
+              <StyledCell align="right">{row.due_num}</StyledCell>
+              <StyledCell align="right">
                 {" "}
                 <Button
                   color="secondary"
@@ -50,7 +59,7 @@ export function ListingsTable({ rows, removeListing }) {
                 >
                   remove
                 </Button>
-              </TableCell>
+              </StyledCell>
             </TableRow>
           ))}
         </TableBody>
@@ -67,27 +76,27 @@ export function UsersTable({ rows, removeUser }) {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Users</TableCell>
-            <TableCell align="right">Last Login</TableCell>
-            <TableCell align="right">Score</TableCell>
-            <TableCell align="right">Created at</TableCell>
+            <StyledCell>Users</StyledCell>
+            <StyledCell align="right">Last Login</StyledCell>
+            <StyledCell align="right">Score</StyledCell>
+            <StyledCell align="right">Created at</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
             <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
+              <StyledCell component="th" scope="row">
                 {row.name}
-              </TableCell>
-              <TableCell align="right">{row.last_login}</TableCell>
-              <TableCell align="right">{row.score}</TableCell>
-              <TableCell align="right">{row.create_at}</TableCell>
-              <TableCell align="right">
+              </StyledCell>
+              <StyledCell align="right">{row.last_login}</StyledCell>
+              <StyledCell align="right">{row.score}</StyledCell>
+              <StyledCell align="right">{row.create_at}</StyledCell>
+              <StyledCell align="right">
                 {" "}
                 <Button color="secondary" onClick={() => removeUser(row.name)}>
                   remove
                 </Button>
-              </TableCell>
+              </StyledCell>
             </TableRow>
           ))}
         </TableBody>
@@ -104,21 +113,21 @@ export function RequestTable({ rows, approveRequest }) {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>Items</TableCell>
-            <TableCell align="right">Last Login</TableCell>
-            <TableCell align="right">Request Count</TableCell>
-            <TableCell align="right">Price</TableCell>
+            <StyledCell>Items</StyledCell>
+            <StyledCell align="right">Last Login</StyledCell>
+            <StyledCell align="right">Request Count</StyledCell>
+            <StyledCell align="right">Price</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
             <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
+              <StyledCell component="th" scope="row">
                 {row.name}
-              </TableCell>
-              <TableCell align="right">{row.request_count}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">
+              </StyledCell>
+              <StyledCell align="right">{row.request_count}</StyledCell>
+              <StyledCell align="right">{row.price}</StyledCell>
+              <StyledCell align="right">
                 {" "}
                 <Button
                   color="secondary"
@@ -126,7 +135,7 @@ export function RequestTable({ rows, approveRequest }) {
                 >
                   approve
                 </Button>
-              </TableCell>
+              </StyledCell>
             </TableRow>
           ))}
         </TableBody>
