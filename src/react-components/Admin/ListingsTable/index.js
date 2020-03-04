@@ -42,12 +42,13 @@ export default function ListingsTable({ rows,removeListing }) {
               <TableCell align="right">{row.rent_num}</TableCell>
               <TableCell align="right">{row.stock_num}</TableCell>
               <TableCell align="right">{row.due_num}</TableCell>
-              <Button
+              <TableCell align="right">              <Button
                 color="secondary"
                 onClick={() => removeListing(row.name)}
               >
                 remove
-              </Button>
+              </Button></TableCell>
+
             </TableRow>
           ))}
         </TableBody>

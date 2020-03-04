@@ -220,7 +220,7 @@ class ListingsView extends React.Component {
           rows={this.state.listings}
           removeListing={this.removeListing.bind(this)}
         ></ListingsTable>
-        <Typography variant="h7">Add new listing</Typography>
+        <Typography variant="h6">Add new listing</Typography>
         <AddListingForm
           handleChange={this.handleChange.bind(this)}
           handleSubmit={this.handleSubmit.bind(this)}
