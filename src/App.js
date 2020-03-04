@@ -29,19 +29,27 @@ class App extends React.Component {
   // I'd like to keep all the link routing here
   constructor(props){  
     super(props);  
-    this.state = { showPopup: false };  
+    this.state = { showPopup: false, loggedIn: false };  
     }
-   togglePopup() {
+   
+    togglePopup() {
         this.setState({  
             showPopup: !this.state.showPopup  
        });  
     }
+
+    login() {
+        this.setState({  
+            showPopup: !this.state.loggedIn
+       });  
+    }
+
   render() {
     const notInAdmin = /^(?!.*(\/admin)).*$/;
     return (
       <Router>
         <div className={"App"}>
-          <Route path={notInAdmin} exact strict render={() => <NavBar togglePopup={this.togglePopup.bind(this)}/> } />
+          <Route path={notInAdmin} exact strict render={() => <NavBar togglePopup={this.togglePopup.bind(this)} loggedIn={this.state.loggedIn}/>}/>
           <Switch>
             <Route path={"/"} exact strict component={Home} />
             <Route path={"/catalogue"} exact strict component={Catalogue} />
@@ -51,7 +59,8 @@ class App extends React.Component {
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
             {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
-            {this.state.showPopup && <Popup closePopup={this.togglePopup.bind(this)} title={'Sign in'}/>}  
+            {this.state.showPopup && <Popup closePopup={this.togglePopup.bind(this)}
+                                            login={this.login.bind(this)}/>}  
           
         </div>
       </Router>
