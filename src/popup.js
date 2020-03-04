@@ -50,7 +50,7 @@ class SignUpForm extends React.Component {
                         <input type={"text"} name={"confirmPass"} placeholder={"Confim password"}/>
                         <input type={"submit"} value={"sign up"}/>
             </form>
-            <button onClick={this.props.toggle}> Sign in </button>
+            <button onClick={this.props.toggle}> Back to sign in </button>
         </div>
         );
     }
