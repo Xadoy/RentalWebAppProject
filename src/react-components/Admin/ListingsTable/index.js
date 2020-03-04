@@ -1,20 +1,23 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
-  },
+    minWidth: 650
+  }
 });
 
-export default function ListingsTable({rows}) {
+export default function ListingsTable({ rows,removeListing }) {
   const classes = useStyles();
 
   return (
@@ -39,6 +42,12 @@ export default function ListingsTable({rows}) {
               <TableCell align="right">{row.rent_num}</TableCell>
               <TableCell align="right">{row.stock_num}</TableCell>
               <TableCell align="right">{row.due_num}</TableCell>
+              <Button
+                color="secondary"
+                onClick={() => removeListing(row.name)}
+              >
+                remove
+              </Button>
             </TableRow>
           ))}
         </TableBody>

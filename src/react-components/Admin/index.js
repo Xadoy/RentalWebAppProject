@@ -149,24 +149,34 @@ class ManageView extends React.Component {
   }
 }
 
-function createData(name, total_num, rent_num, stock_num, due_num) {
+function createListingRow(name, total_num, rent_num, stock_num, due_num) {
   return { name, total_num, rent_num, stock_num, due_num };
 }
 
-const rows = [
-  createData('Rune Scimitar', 200, 100, 24, 3),
-  createData('Rune 2 Handed Sword', 250, 9.0, 37, 4),
-  createData('White Party Hat', 300, 16, 24, 6),
-  createData('Saradomin Platebody', 305, 3, 67, 8),
-  createData('Royal Gala Apple', 356, 16, 49, 3),
-];
-
 class ListingsView extends React.Component {
+  state = {
+    listings: [
+      createListingRow("Rune Scimitar", 200, 100, 24, 3),
+      createListingRow("Rune 2 Handed Sword", 250, 9.0, 37, 4),
+      createListingRow("White Party Hat", 300, 16, 24, 6),
+      createListingRow("Saradomin Platebody", 305, 3, 67, 8),
+      createListingRow("Royal Gala Apple", 356, 16, 49, 3)
+    ]
+  };
+
+  removeListing(name) {
+    this.setState({
+      listings: this.state.listings.filter((l) => l.name !== name)
+    });
+  }
   render() {
     return (
       <>
         <Typography variant="h5">ListingsView</Typography>
-        <ListingsTable rows={rows} ></ListingsTable>
+        <ListingsTable
+          rows={this.state.listings}
+          removeListing={this.removeListing.bind(this)}
+        ></ListingsTable>
       </>
     );
   }
