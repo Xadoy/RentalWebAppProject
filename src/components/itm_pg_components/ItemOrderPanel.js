@@ -32,11 +32,9 @@ class Order extends React.Component {
                     <input type="reset"/>
                 </form>
                 <div>
-                    ${this.state.cost * this.state.days}
+                    {this.state.days>0 ? "Negative days" : "$" + this.state.days*this.state.cost}
                 </div>
-                <button onClick={this.purchase}>
-                    Confirm Order
-                </button>
+                <button onClick={this.purchase}>Confirm Order</button>
             </div>
         );
     }

@@ -4,6 +4,7 @@ class Comments extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            user: this.props.user,
             comments: [{message: "hello there", name: "bro", time: "2020-03-01"},
                 {message: "yo", name: "bro 2", time: "2020-03-02"}]
         };
@@ -39,7 +40,7 @@ class Comments extends React.Component {
     }
 
     addComment() {
-        let comment = [{message: document.getElementById("comment").value, name: "curr", time: this.get_today()}];
+        let comment = [{message: document.getElementById("comment").value, name: this.state.user, time: this.get_today()}];
         this.setState({
             comments: this.state.comments.concat(comment)
         });

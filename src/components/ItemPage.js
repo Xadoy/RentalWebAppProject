@@ -12,7 +12,8 @@ class Item extends React.Component {
                 <Pics/>
                 <Order/>
                 <Desc/>
-                <Comments/>
+                {/*TODO pass user/loggedInState to here later on*/ }
+                <Comments user={"current user"} />
             </div>
         )
     }
