@@ -13,7 +13,7 @@ import {
   Typography,
   makeStyles
 } from "@material-ui/core";
-import ListingsTable from "./ListingsTable";
+import {ListingsTable, UsersTable}from "./Table";
 
 import "./styles.css";
 
@@ -204,7 +204,6 @@ class ListingsView extends React.Component {
       this.setState({
         listings: this.state.listings
       });
-    // console.log(this.state)
   }
 
   removeListing(name) {
@@ -230,9 +229,33 @@ class ListingsView extends React.Component {
   }
 }
 
+function createUser(name, last_login, score, create_at) {
+  return { name, last_login, score, create_at };
+}
+
 class UserManagementView extends React.Component {
+  state = {
+    users: [
+      createUser("user1", "20190910", 10, "20150910"),
+      createUser("user2", "20170820", 10, "20170215"),
+      createUser("user3", "20160530", 8, "20130211"),
+      createUser("user4", "20190313", 3, "20190113"),
+      createUser("user5", "20200220", 9, "20200120")
+    ]
+  };
+
+  removeUser(name) {
+    this.setState({
+      users: this.state.users.filter(u => u.name !== name)
+    });
+  }
   render() {
-    return <Typography variant="h5">UserManagementView</Typography>;
+    return (
+      <>
+    <Typography variant="h5">UserManagementView</Typography>
+    <UsersTable rows={this.state.users} removeUser={this.removeUser.bind(this)}/>
+    </>
+    );
   }
 }
 class RequestsView extends React.Component {

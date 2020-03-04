@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function ListingsTable({ rows,removeListing }) {
+export function ListingsTable({ rows,removeListing }) {
   const classes = useStyles();
 
   return (
@@ -45,6 +45,44 @@ export default function ListingsTable({ rows,removeListing }) {
               <TableCell align="right">              <Button
                 color="secondary"
                 onClick={() => removeListing(row.name)}
+              >
+                remove
+              </Button></TableCell>
+
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+export function UsersTable({ rows,removeUser }) {
+  const classes = useStyles();
+
+  return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Users</TableCell>
+            <TableCell align="right">Last Login</TableCell>
+            <TableCell align="right">Score</TableCell>
+            <TableCell align="right">Created at</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map(row => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.last_login}</TableCell>
+              <TableCell align="right">{row.score}</TableCell>
+              <TableCell align="right">{row.create_at}</TableCell>
+              <TableCell align="right">              <Button
+                color="secondary"
+                onClick={() => removeUser(row.name)}
               >
                 remove
               </Button></TableCell>
