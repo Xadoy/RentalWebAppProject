@@ -18,8 +18,8 @@ class NavBar extends React.Component {
                     <li><Link to={"/"}>Home</Link></li>
                     <li><Link to={"/catalogue"}>Browse</Link></li>
                     <li><Link to={"/about"}>About</Link></li>
-                    <li><button onClick={this.props.login}>Sign-in</button>
-                    </li>
+                    {!this.props.loggedIn && <li><button onClick={this.props.togglePopup}>Sign-in</button></li>}
+                    {this.props.loggedIn && <button>Profile</button>}
                     {/* TODO: temporary entry point of admin page
                     once sign-in pop-up is finished, this should be changed*/}
                     <li>
