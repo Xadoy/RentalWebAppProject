@@ -10,11 +10,10 @@ class Item extends React.Component {
             <div>
                 Current item: {this.props.match.params.item_id}
                 <Pics/>
-                <Order className={'panel-config'}/>
-                <div className={'panel-config'}>
-                    <Desc/>
-                    <Comments/>
-                </div>
+                <Order/>
+                <Desc/>
+                {/*TODO pass user/loggedInState to here later on*/ }
+                <Comments user={"current user"} />
             </div>
         )
     }

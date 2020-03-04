@@ -6,8 +6,14 @@ import {
   withStyles,
   Grid,
   Paper,
+  Select,
+  FormControl,
+  TextField,
+  Button,
+  Typography,
   makeStyles
 } from "@material-ui/core";
+import ListingsTable from "./ListingsTable";
 
 import "./styles.css";
 
@@ -19,8 +25,23 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "black",
     color: "gray",
     position: "fixed"
+  },
+  formview: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: 200
+    }
   }
 }));
+
+const StyledForm = withStyles(theme => ({
+  root: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: 200
+    }
+  }
+}))(Grid);
 
 const StyledListItem = withStyles({
   root: {
@@ -35,7 +56,7 @@ const StyledListItem = withStyles({
   },
   selected: {
     backgroundColor: "red",
-    color: "red",
+    color: "red"
   }
 })(ListItem);
 
@@ -59,43 +80,93 @@ function Sidebar({ options, selected, onClickHandler }) {
   );
 }
 
-class ManageView extends React.Component {
+class AdminProfileForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { username: props.username, password: props.password };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.onSubmit(this.state.username, this.state.password);
+    // this.handleSubmit submitHandler()
+  }
   render() {
-    return <div>ManageView</div>;
+    return (
+      <StyledForm>
+        <TextField
+          // id="filled-name"
+          label="Name"
+          name="username"
+          value={this.state.username}
+          onChange={this.handleChange}
+          // variant="filled"
+        />
+        <TextField
+          label="Password"
+          type="password"
+          name="password"
+          value={this.state.password}
+          onChange={this.handleChange}
+          // variant="filled"
+        />
+        <div>
+          <Button
+            type="submit"
+            // fullWidth
+            // variant="contained"
+            // color="primary"
+            // className={classes.submit}
+            onClick={this.handleSubmit}
+          >
+            Save
+          </Button>
+        </div>
+      </StyledForm>
+    );
   }
 }
 
-function FormRow() {
-  return (
-    <>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-    </>
-  );
+class ManageView extends React.Component {
+  render() {
+    return (
+      <>
+        <Typography variant="h5">ManageView</Typography>
+        <AdminProfileForm
+          onSubmit={this.props.onChange}
+          username={this.props.username}
+          password={this.props.password}
+        />
+      </>
+    );
+  }
 }
+
+function createData(name, total_num, rent_num, stock_num, due_num) {
+  return { name, total_num, rent_num, stock_num, due_num };
+}
+
+const rows = [
+  createData('Rune Scimitar', 200, 100, 24, 3),
+  createData('Rune 2 Handed Sword', 250, 9.0, 37, 4),
+  createData('White Party Hat', 300, 16, 24, 6),
+  createData('Saradomin Platebody', 305, 3, 67, 8),
+  createData('Royal Gala Apple', 356, 16, 49, 3),
+];
+
 class ListingsView extends React.Component {
   render() {
     return (
       <>
-        <div>ListingsView</div>
-        <Grid container spacing={1}>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-        </Grid>
+        <Typography variant="h5">ListingsView</Typography>
+        <ListingsTable rows={rows} ></ListingsTable>
       </>
     );
   }
@@ -103,26 +174,39 @@ class ListingsView extends React.Component {
 
 class UserManagementView extends React.Component {
   render() {
-    return <div>UserManagementView</div>;
+    return <Typography variant="h5">UserManagementView</Typography>;
   }
 }
 class RequestsView extends React.Component {
   render() {
-    return <div>RequestsView</div>;
+    return <Typography variant="h5">RequestsView</Typography>;
   }
 }
 
 class AdminPanel extends React.Component {
+  state = {
+    username: "admin",
+    password: "password"
+  };
+  handleSubmit(username, password) {
+    this.setState({ username: username, password: password });
+  }
   render() {
-    const {view} = this.props;
+    const { view } = this.props;
     return (
       <>
-        {view === 'Manage' && <ManageView />}
-        {view === 'Listings' && <ListingsView />}
-        {view === 'User Management' && <UserManagementView />}
-        {view === 'Requests' && <RequestsView />}
+        {view === "Manage" && (
+          <ManageView
+            username={this.state.username}
+            password={this.state.password}
+            onChange={this.handleSubmit.bind(this)}
+          />
+        )}
+        {view === "Listings" && <ListingsView />}
+        {view === "User Management" && <UserManagementView />}
+        {view === "Requests" && <RequestsView />}
       </>
-      );
+    );
   }
 }
 
