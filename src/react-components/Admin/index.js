@@ -10,8 +10,10 @@ import {
   FormControl,
   TextField,
   Button,
+  Typography,
   makeStyles
 } from "@material-ui/core";
+import ListingsTable from "./ListingsTable";
 
 import "./styles.css";
 
@@ -25,19 +27,19 @@ const useStyles = makeStyles(theme => ({
     position: "fixed"
   },
   formview: {
-    '& .MuiTextField-root': {
+    "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: 200,
-    },
+      width: 200
+    }
   }
 }));
 
 const StyledForm = withStyles(theme => ({
   root: {
-    '& .MuiTextField-root': {
+    "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: 200,
-    },
+      width: 200
+    }
   }
 }))(Grid);
 
@@ -99,7 +101,6 @@ class AdminProfileForm extends React.Component {
   render() {
     return (
       <StyledForm>
-
         <TextField
           // id="filled-name"
           label="Name"
@@ -117,18 +118,17 @@ class AdminProfileForm extends React.Component {
           // variant="filled"
         />
         <div>
-        <Button
-          type="submit"
-          // fullWidth
-          // variant="contained"
-          // color="primary"
-          // className={classes.submit}
-          onClick={this.handleSubmit}
-        >
-          Save
-        </Button>
+          <Button
+            type="submit"
+            // fullWidth
+            // variant="contained"
+            // color="primary"
+            // className={classes.submit}
+            onClick={this.handleSubmit}
+          >
+            Save
+          </Button>
         </div>
-
       </StyledForm>
     );
   }
@@ -138,7 +138,7 @@ class ManageView extends React.Component {
   render() {
     return (
       <>
-        <div>ManageView</div>
+        <Typography variant="h5">ManageView</Typography>
         <AdminProfileForm
           onSubmit={this.props.onChange}
           username={this.props.username}
@@ -149,37 +149,24 @@ class ManageView extends React.Component {
   }
 }
 
-function FormRow() {
-  return (
-    <>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-      <Grid item xs={4}>
-        <Paper>item</Paper>
-      </Grid>
-    </>
-  );
+function createData(name, total_num, rent_num, stock_num, due_num) {
+  return { name, total_num, rent_num, stock_num, due_num };
 }
+
+const rows = [
+  createData('Rune Scimitar', 200, 100, 24, 3),
+  createData('Rune 2 Handed Sword', 250, 9.0, 37, 4),
+  createData('White Party Hat', 300, 16, 24, 6),
+  createData('Saradomin Platebody', 305, 3, 67, 8),
+  createData('Royal Gala Apple', 356, 16, 49, 3),
+];
+
 class ListingsView extends React.Component {
   render() {
     return (
       <>
-        <div>ListingsView</div>
-        <Grid container spacing={1}>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-          <Grid container item xs={12} spacing={3}>
-            <FormRow />
-          </Grid>
-        </Grid>
+        <Typography variant="h5">ListingsView</Typography>
+        <ListingsTable rows={rows} ></ListingsTable>
       </>
     );
   }
@@ -187,12 +174,12 @@ class ListingsView extends React.Component {
 
 class UserManagementView extends React.Component {
   render() {
-    return <div>UserManagementView</div>;
+    return <Typography variant="h5">UserManagementView</Typography>;
   }
 }
 class RequestsView extends React.Component {
   render() {
-    return <div>RequestsView</div>;
+    return <Typography variant="h5">RequestsView</Typography>;
   }
 }
 
