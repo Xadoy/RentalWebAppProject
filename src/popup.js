@@ -16,7 +16,10 @@ class Popup extends React.Component {
     <div className='popup_background'>  
         <div className='popup_inner'>  
             <h1>Sign {this.state.signUp ? 'up' : 'in'}</h1>
-            {this.state.signUp ? <SignUpForm toggle={this.toggleSignUp.bind(this)}/> : <SignInForm toggle={this.toggleSignUp.bind(this)}/>}
+            {this.state.signUp ? <SignUpForm toggle={this.toggleSignUp.bind(this)}
+                                login={this.props.login}/> : 
+                                <SignInForm toggle={this.toggleSignUp.bind(this)}
+                                login={this.props.login}/>}
             <button onClick={this.props.closePopup}>close</button> 
         </div>  
     </div>  
@@ -25,14 +28,34 @@ class Popup extends React.Component {
 }
 
 class SignInForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user : '',
+            pass : ''
+        }
+
+        this.verifyLogin = this.verifyLogin.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    verifyLogin (event){
+
+    }
+
+    handleChange(event) {
+
+    }
+    
     render(){
         return (
         <div> 
-            <form action={"sign in"}>
-                        <input type={"text"} name={"user"} placeholder={"Username"}/>
-                        <input type={"text"} name={"pass"} placeholder={"Password"}/>
+            <form onSubmit={this.verifyLogin}>
+                        <input type="text" value={this.state.user} onChange={this.handleChange} placeholder={"Username"}/>
+                        <input type="text" value={this.state.pass} onChange={this.handleChange} placeholder={"Password"}/>
                         <input type={"submit"} value={"sign in"}/>
             </form>
+
             <button onClick={this.props.toggle}> Sign up </button>
         </div>
         );
