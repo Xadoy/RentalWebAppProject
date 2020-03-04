@@ -41,7 +41,7 @@ class App extends React.Component {
     return (
       <Router>
         <div className={"App"}>
-          <Route path={notInAdmin} component={NavBar} />
+          <Route path={notInAdmin} exact strict render={() => <NavBar login={this.login.bind(this)}/> } />
           <Switch>
             <Route path={"/"} exact strict component={Home} />
             <Route path={"/catalogue"} exact strict component={Catalogue} />
@@ -50,8 +50,8 @@ class App extends React.Component {
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
-            <button onClick={this.login.bind(this)}>Sign-in</button>
-            {this.state.showPopup ?  <Popup closePopup={this.login.bind(this)}/> : null}  
+            {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
+            {this.state.showPopup && <Popup closePopup={this.login.bind(this)}/>}  
           
         </div>
       </Router>
