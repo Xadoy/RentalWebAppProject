@@ -1,3 +1,6 @@
 .admin_panel {
-  margin-left: 240px
+  margin-left: 240px;
+  background-color: #5a7a9e;
+  height: 100%;
+  color: black;
 }
