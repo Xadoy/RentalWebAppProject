@@ -34,13 +34,13 @@ class App extends React.Component {
    
     togglePopup() {
         this.setState({  
-            showPopup: !this.state.showPopup  
+            showPopup: !this.state.showPopup
        });  
     }
 
     login() {
         this.setState({  
-            showPopup: !this.state.loggedIn
+            loggedIn: !this.state.loggedIn
        });  
     }
 
@@ -49,7 +49,9 @@ class App extends React.Component {
     return (
       <Router>
         <div className={"App"}>
-          <Route path={notInAdmin} exact strict render={() => <NavBar togglePopup={this.togglePopup.bind(this)} loggedIn={this.state.loggedIn}/>}/>
+          <Route path={notInAdmin} exact strict render={() => <NavBar togglePopup={this.togglePopup.bind(this)} 
+                                                                    loggedIn={this.state.loggedIn}
+                                                                    logout={this.login.bind(this)}/>}/>
           <Switch>
             <Route path={"/"} exact strict component={Home} />
             <Route path={"/catalogue"} exact strict component={Catalogue} />

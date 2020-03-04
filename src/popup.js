@@ -17,7 +17,8 @@ class Popup extends React.Component {
         <div className='popup_inner'>  
             <h1>Sign {this.state.signUp ? 'up' : 'in'}</h1>
             {this.state.signUp ? <SignUpForm toggle={this.toggleSignUp.bind(this)}
-                                login={this.props.login}/> : 
+                                login={this.props.login}
+                                closePopup={this.props.closePopup}/> : 
                                 <SignInForm toggle={this.toggleSignUp.bind(this)}
                                 login={this.props.login}/>}
             <button onClick={this.props.closePopup}>close</button> 
@@ -43,8 +44,9 @@ class SignInForm extends React.Component {
     verifyLogin (event){
         // alert('user: ' + this.state.user + ' pass: ' + this.state.pass);
         if (this.state.user == 'master' && this.state.pass == 'masterpassword'){
-            //this.props.login();
+            this.props.login();
             alert('sign in successful');
+            //this.props.closePopup();
         }
         else{
             alert('incorrect username or password');
