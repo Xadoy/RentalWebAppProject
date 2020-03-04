@@ -149,6 +149,29 @@ class ManageView extends React.Component {
   }
 }
 
+function AddListingForm({ handleChange, handleSubmit }) {
+  return (
+    <StyledForm>
+      <TextField
+        // id="filled-name"
+        label="Listing Name"
+        name="new_listing_name"
+        onChange={handleChange}
+      />
+      <TextField
+        label="Total"
+        name="new_listing_total"
+        onChange={handleChange}
+      />
+      <div>
+        <Button type="submit" onClick={handleSubmit}>
+          Add Listing
+        </Button>
+      </div>
+    </StyledForm>
+  );
+}
+
 function createListingRow(name, total_num, rent_num, stock_num, due_num) {
   return { name, total_num, rent_num, stock_num, due_num };
 }
@@ -164,9 +187,29 @@ class ListingsView extends React.Component {
     ]
   };
 
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit() {
+
+    this.state.listings.push(
+      createListingRow(
+        this.state.new_listing_name,
+        this.state.new_listing_total,
+        0,
+        0,
+        0
+      ))
+      this.setState({
+        listings: this.state.listings
+      });
+    // console.log(this.state)
+  }
+
   removeListing(name) {
     this.setState({
-      listings: this.state.listings.filter((l) => l.name !== name)
+      listings: this.state.listings.filter(l => l.name !== name)
     });
   }
   render() {
@@ -177,6 +220,11 @@ class ListingsView extends React.Component {
           rows={this.state.listings}
           removeListing={this.removeListing.bind(this)}
         ></ListingsTable>
+        <Typography variant="h7">Add new listing</Typography>
+        <AddListingForm
+          handleChange={this.handleChange.bind(this)}
+          handleSubmit={this.handleSubmit.bind(this)}
+        ></AddListingForm>
       </>
     );
   }
