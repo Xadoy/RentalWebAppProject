@@ -36,23 +36,36 @@ class SignInForm extends React.Component {
         }
 
         this.verifyLogin = this.verifyLogin.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleUser = this.handleUser.bind(this);
+        this.handlePass = this.handlePass.bind(this);
     }
 
     verifyLogin (event){
-
+        // alert('user: ' + this.state.user + ' pass: ' + this.state.pass);
+        if (this.state.user == 'master' && this.state.pass == 'masterpassword'){
+            //this.props.login();
+            alert('sign in successful');
+        }
+        else{
+            alert('incorrect username or password');
+        }
+        event.preventDefault();
     }
 
-    handleChange(event) {
-
+    handleUser(event) {
+        this.setState({user: event.target.value});
+    }
+    
+    handlePass(event) {
+        this.setState({pass: event.target.value});
     }
     
     render(){
         return (
         <div> 
             <form onSubmit={this.verifyLogin}>
-                        <input type="text" value={this.state.user} onChange={this.handleChange} placeholder={"Username"}/>
-                        <input type="text" value={this.state.pass} onChange={this.handleChange} placeholder={"Password"}/>
+                        <input type="text" value={this.state.user} onChange={this.handleUser} placeholder={"Username"}/>
+                        <input type="password" value={this.state.pass} onChange={this.handlePass} placeholder={"Password"}/>
                         <input type={"submit"} value={"sign in"}/>
             </form>
 
