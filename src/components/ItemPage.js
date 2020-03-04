@@ -4,11 +4,13 @@ import Desc from "./itm_pg_components/ItemDescriptionPanel";
 import Comments from "./itm_pg_components/ItemCommentPanel";
 import Order from "./itm_pg_components/ItemOrderPanel";
 
+
 class Item extends React.Component {
+
     render() {
         return (
             <div>
-                Current item: {this.props.match.params.item_id}
+                Current Item: {this.props.match.params.item_id}
                 <Pics/>
                 <Order/>
                 <Desc/>

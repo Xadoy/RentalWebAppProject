@@ -14,7 +14,7 @@ class Catalogue extends React.Component {
                 Catalogue page
                 Current item: {this.props.match.params.item_id}
                 <Pics/>
-        
+
             </div>
         )
     }
