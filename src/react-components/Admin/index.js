@@ -23,8 +23,23 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "black",
     color: "gray",
     position: "fixed"
+  },
+  formview: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
   }
 }));
+
+const StyledForm = withStyles(theme => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+  }
+}))(Grid);
 
 const StyledListItem = withStyles({
   root: {
@@ -81,22 +96,9 @@ class AdminProfileForm extends React.Component {
     this.props.onSubmit(this.state.username, this.state.password);
     // this.handleSubmit submitHandler()
   }
-
   render() {
     return (
-      <form>
-        {/* <InputLabel>Age</InputLabel>
-          Pick your favorite flavor:
-          <Select
-            name="test"
-            value={this.state.value}
-            onChange={this.handleChange}
-          >
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option>
-            <option value="mango">Mango</option>
-          </Select> */}
+      <StyledForm>
 
         <TextField
           // id="filled-name"
@@ -107,14 +109,14 @@ class AdminProfileForm extends React.Component {
           // variant="filled"
         />
         <TextField
-          id="filled-password-input"
           label="Password"
           type="password"
           name="password"
           value={this.state.password}
           onChange={this.handleChange}
-          variant="filled"
+          // variant="filled"
         />
+        <div>
         <Button
           type="submit"
           // fullWidth
@@ -125,7 +127,9 @@ class AdminProfileForm extends React.Component {
         >
           Save
         </Button>
-      </form>
+        </div>
+
+      </StyledForm>
     );
   }
 }
