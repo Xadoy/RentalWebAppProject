@@ -51,7 +51,7 @@ class App extends React.Component {
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
             {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
-            {this.state.showPopup && <Popup closePopup={this.login.bind(this)}/>}  
+            {this.state.showPopup && <Popup closePopup={this.login.bind(this)} title={'Sign in'}/>}  
           
         </div>
       </Router>
