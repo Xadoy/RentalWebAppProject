@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   }
 });
 
-export function ListingsTable({ rows,removeListing }) {
+export function ListingsTable({ rows, removeListing }) {
   const classes = useStyles();
 
   return (
@@ -42,13 +42,15 @@ export function ListingsTable({ rows,removeListing }) {
               <TableCell align="right">{row.rent_num}</TableCell>
               <TableCell align="right">{row.stock_num}</TableCell>
               <TableCell align="right">{row.due_num}</TableCell>
-              <TableCell align="right">              <Button
-                color="secondary"
-                onClick={() => removeListing(row.name)}
-              >
-                remove
-              </Button></TableCell>
-
+              <TableCell align="right">
+                {" "}
+                <Button
+                  color="secondary"
+                  onClick={() => removeListing(row.name)}
+                >
+                  remove
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -57,7 +59,7 @@ export function ListingsTable({ rows,removeListing }) {
   );
 }
 
-export function UsersTable({ rows,removeUser }) {
+export function UsersTable({ rows, removeUser }) {
   const classes = useStyles();
 
   return (
@@ -80,13 +82,51 @@ export function UsersTable({ rows,removeUser }) {
               <TableCell align="right">{row.last_login}</TableCell>
               <TableCell align="right">{row.score}</TableCell>
               <TableCell align="right">{row.create_at}</TableCell>
-              <TableCell align="right">              <Button
-                color="secondary"
-                onClick={() => removeUser(row.name)}
-              >
-                remove
-              </Button></TableCell>
+              <TableCell align="right">
+                {" "}
+                <Button color="secondary" onClick={() => removeUser(row.name)}>
+                  remove
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
 
+export function RequestTable({ rows, approveRequest }) {
+  const classes = useStyles();
+
+  return (
+    <TableContainer component={Paper}>
+      <Table className={classes.table} size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Items</TableCell>
+            <TableCell align="right">Last Login</TableCell>
+            <TableCell align="right">Request Count</TableCell>
+            <TableCell align="right">Price</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map(row => (
+            <TableRow key={row.name}>
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="right">{row.request_count}</TableCell>
+              <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right">
+                {" "}
+                <Button
+                  color="secondary"
+                  onClick={() => approveRequest(row.name)}
+                >
+                  approve
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

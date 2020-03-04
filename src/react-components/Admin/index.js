@@ -13,7 +13,7 @@ import {
   Typography,
   makeStyles
 } from "@material-ui/core";
-import {ListingsTable, UsersTable}from "./Table";
+import { ListingsTable, UsersTable, RequestTable } from "./Table";
 
 import "./styles.css";
 
@@ -192,7 +192,6 @@ class ListingsView extends React.Component {
   }
 
   handleSubmit() {
-
     this.state.listings.push(
       createListingRow(
         this.state.new_listing_name,
@@ -200,10 +199,11 @@ class ListingsView extends React.Component {
         0,
         0,
         0
-      ))
-      this.setState({
-        listings: this.state.listings
-      });
+      )
+    );
+    this.setState({
+      listings: this.state.listings
+    });
   }
 
   removeListing(name) {
@@ -229,18 +229,18 @@ class ListingsView extends React.Component {
   }
 }
 
-function createUser(name, last_login, score, create_at) {
+function createUserRow(name, last_login, score, create_at) {
   return { name, last_login, score, create_at };
 }
 
 class UserManagementView extends React.Component {
   state = {
     users: [
-      createUser("user1", "20190910", 10, "20150910"),
-      createUser("user2", "20170820", 10, "20170215"),
-      createUser("user3", "20160530", 8, "20130211"),
-      createUser("user4", "20190313", 3, "20190113"),
-      createUser("user5", "20200220", 9, "20200120")
+      createUserRow("user1", "20190910", 10, "20150910"),
+      createUserRow("user2", "20170820", 10, "20170215"),
+      createUserRow("user3", "20160530", 8, "20130211"),
+      createUserRow("user4", "20190313", 3, "20190113"),
+      createUserRow("user5", "20200220", 9, "20200120")
     ]
   };
 
@@ -252,15 +252,44 @@ class UserManagementView extends React.Component {
   render() {
     return (
       <>
-    <Typography variant="h5">UserManagementView</Typography>
-    <UsersTable rows={this.state.users} removeUser={this.removeUser.bind(this)}/>
-    </>
+        <Typography variant="h5">UserManagementView</Typography>
+        <UsersTable
+          rows={this.state.users}
+          removeUser={this.removeUser.bind(this)}
+        />
+      </>
     );
   }
 }
+
+function createRequestRow(name, request_count, price) {
+  return { name, request_count, price };
+}
 class RequestsView extends React.Component {
+  state = {
+    requests: [
+      createRequestRow("Rune Scimitar", 200, 100),
+      createRequestRow("Rune 2 Handed Sword", 250, 98),
+      createRequestRow("White Party Hat", 300, 16),
+      createRequestRow("Saradomin Platebody", 305, 3),
+      createRequestRow("Royal Gala Apple", 356, 16)
+    ]
+  };
+  approveRequest(name) {
+    this.setState({
+      requests: this.state.requests.filter(r => r.name !== name)
+    });
+  }
   render() {
-    return <Typography variant="h5">RequestsView</Typography>;
+    return (
+      <>
+        <Typography variant="h5">RequestsView</Typography>
+        <RequestTable
+          rows={this.state.requests}
+          approveRequest={this.approveRequest.bind(this)}
+        />
+      </>
+    );
   }
 }
 
