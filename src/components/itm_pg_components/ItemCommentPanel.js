@@ -58,9 +58,8 @@ function Comment(props) {
     const { name, message, time } = props.comment;
     return (
         <div>
-            <small>time posted: {time}</small>
-            <h6>user: {name}</h6>
-            {message}
+            <small>time posted: {time} user: {name}</small>
+            <br/>{message}
         </div>
     );
 }
