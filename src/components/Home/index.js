@@ -1,5 +1,5 @@
 import React from "react";
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "../SearchBar";
 import {Link} from "react-router-dom";
 import "./styles.css";
 //import Popup from "./"

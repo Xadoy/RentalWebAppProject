@@ -5,9 +5,9 @@ import Item from "./components/ItemPage";
 import SearchResults from "./components/SearchResults";
 import About from "./components/AboutPage";
 import Catalogue from "./components/CataloguePage";
-import Home from "./react-components/Home";
+import Home from "./components/Home";
 import NavBar from "./components/NavigationBar";
-import Admin from "./react-components/Admin";
+import Admin from "./components/Admin";
 
 import Popup from "./popup.js";
 /* ###################################################################################################################
