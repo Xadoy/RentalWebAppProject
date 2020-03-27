@@ -45,10 +45,11 @@ app.use(
 
 // redirect to https if runing on production env
 if (env === "production") {
-  app.use(function(request, response) {
+  app.use(function(request, response, next) {
     if (!request.secure && request.get('x-forwarded-proto') !== 'https') {
-      response.redirect("https://" + request.headers.host + request.url);
+      return response.redirect("https://" + request.get('host') + request.url);
     }
+    next();
   });
 }
 
