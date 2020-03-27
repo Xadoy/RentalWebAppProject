@@ -14,7 +14,7 @@ import {
   makeStyles
 } from "@material-ui/core";
 import { ListingsTable, UsersTable, RequestTable } from "./Table";
-
+import { getItems, addItem, delItem } from "../../actions/item";
 import "./styles.css";
 
 const useStyles = makeStyles(theme => ({
@@ -172,45 +172,56 @@ function AddListingForm({ handleChange, handleSubmit }) {
   );
 }
 
-function createListingRow(name, total_num, rent_num, stock_num, due_num) {
-  return { name, total_num, rent_num, stock_num, due_num };
-}
+// function createListingRow(name, total_num, rent_num, stock_num, due_num) {
+//   return { name, total_num, rent_num, stock_num, due_num };
+// }
 
 class ListingsView extends React.Component {
   state = {
     listings: [
-      createListingRow("Rune Scimitar", 200, 100, 24, 3),
-      createListingRow("Rune 2 Handed Sword", 250, 9.0, 37, 4),
-      createListingRow("White Party Hat", 300, 16, 24, 6),
-      createListingRow("Saradomin Platebody", 305, 3, 67, 8),
-      createListingRow("Royal Gala Apple", 356, 16, 49, 3)
+      // createListingRow("Rune Scimitar", 200, 100, 24, 3),
+      // createListingRow("Rune 2 Handed Sword", 250, 9.0, 37, 4),
+      // createListingRow("White Party Hat", 300, 16, 24, 6),
+      // createListingRow("Saradomin Platebody", 305, 3, 67, 8),
+      // createListingRow("Royal Gala Apple", 356, 16, 49, 3)
     ]
   };
+  componentDidMount() {
+    this.refreshList()
+  }
+
+  refreshList = () => {
+    getItems().then(items => {
+      this.setState({ listings: items });
+    })
+    .catch(error => {
+      console.log("Error:", error);
+    });
+  }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  handleSubmit() {
-    this.state.listings.push(
-      createListingRow(
-        this.state.new_listing_name,
-        this.state.new_listing_total,
-        0,
-        0,
-        0
-      )
-    );
-    this.setState({
-      listings: this.state.listings
+  handleSubmit = async event => {
+    event.preventDefault();
+    const item = {
+        name: this.state.new_listing_name,
+        totalNum: this.state.new_listing_total,
+        description: "testing"
+    }
+    const response = await addItem(item);
+    this.refreshList()
+  };
+
+  removeListing(id) {
+    delItem(id).then(items => {
+      this.refreshList()
+    }).catch(error => {
+      console.log("Error:", error);
     });
   }
 
-  removeListing(name) {
-    this.setState({
-      listings: this.state.listings.filter(l => l.name !== name)
-    });
-  }
   render() {
     return (
       <>
@@ -222,7 +233,7 @@ class ListingsView extends React.Component {
         <Typography variant="h6">Add new listing</Typography>
         <AddListingForm
           handleChange={this.handleChange.bind(this)}
-          handleSubmit={this.handleSubmit.bind(this)}
+          handleSubmit={this.handleSubmit}
         ></AddListingForm>
       </>
     );

@@ -30,6 +30,22 @@ const ItemSchema = new mongoose.Schema({
     minlegth: 1,
     trim: true
   },
+  totalNum: {
+    type: Number,
+    default: 0
+  },
+  rentNum: {
+    type: Number,
+    default: 0
+  },
+  stockNum: {
+    type: Number,
+    default: 0
+  },
+  dueNum: {
+    type: Number,
+    default: 0
+  },
   comments: [CommentSchema]
 });
 

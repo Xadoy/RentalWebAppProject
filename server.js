@@ -13,6 +13,7 @@ mongoose.set("useFindAndModify", false); // for some deprecation issues
 // import the mongoose models
 const { Student } = require("./models/student");
 const { User } = require("./models/user");
+const { Item } = require("./models/item");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -97,6 +98,57 @@ app.get("/users/check-session", (req, res) => {
 /*** API Routes below ************************************/
 // NOTE: The JSON routes (/students) are not protected (no authentication required).
 //       You can (and should!) add this using similar middleware techniques we used in lecture.
+
+// a GET route to get all students
+app.get("/items", (req, res) => {
+  Item.find().then(
+      items => {
+          res.send({ items }); // can wrap in object if want to add more properties
+      },
+      error => {
+          res.status(500).send(error); // server error
+      }
+  );
+});
+app.post("/items", (req, res) => {
+  // Create a new item
+  const {name, description} = req.body
+  const comments = []
+  const item = new Item({
+		name,
+    description,
+    comments
+	});
+  // Save the item
+  item.save().then(
+    item => {
+          res.send(item);
+      },
+      error => {
+          res.status(400).send(error); // 400 for bad request
+      }
+  );
+});
+app.delete("/items/:id", (req, res) => {
+  const id = req.params.id;
+  // Validate id
+  if (!ObjectID.isValid(id)) {
+      res.status(404).send();
+      return;
+  }
+  // Delete a student by their id
+  Item.findByIdAndRemove(id)
+      .then(item => {
+          if (!item) {
+              res.status(404).send();
+          } else {
+              res.send(item);
+          }
+      })
+      .catch(error => {
+          res.status(500).send(); // server error, could not delete.
+      });
+});
 
 /** Student resource routes **/
 // a POST route to *create* a student

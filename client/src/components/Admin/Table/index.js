@@ -43,19 +43,19 @@ export function ListingsTable({ rows, removeListing }) {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.name}>
+            <TableRow key={row._id}>
               <StyledCell component="th" scope="row">
                 {row.name}
               </StyledCell>
-              <StyledCell align="right">{row.total_num}</StyledCell>
-              <StyledCell align="right">{row.rent_num}</StyledCell>
-              <StyledCell align="right">{row.stock_num}</StyledCell>
-              <StyledCell align="right">{row.due_num}</StyledCell>
+              <StyledCell align="right">{row.totalNum}</StyledCell>
+              <StyledCell align="right">{row.rentNum}</StyledCell>
+              <StyledCell align="right">{row.stockNum}</StyledCell>
+              <StyledCell align="right">{row.dueNum}</StyledCell>
               <StyledCell align="right">
                 {" "}
                 <Button
                   color="secondary"
-                  onClick={() => removeListing(row.name)}
+                  onClick={() => removeListing(row._id)}
                 >
                   remove
                 </Button>
