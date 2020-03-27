@@ -113,11 +113,12 @@ app.get("/items", (req, res) => {
 });
 app.post("/items", (req, res) => {
   // Create a new item
-  const {name, description} = req.body
+  const {name, description, totalNum} = req.body
   const comments = []
   const item = new Item({
 		name,
     description,
+    totalNum,
     comments
 	});
   // Save the item

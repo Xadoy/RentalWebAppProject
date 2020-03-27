@@ -153,7 +153,6 @@ function AddListingForm({ handleChange, handleSubmit }) {
   return (
     <StyledForm>
       <TextField
-        // id="filled-name"
         label="Listing Name"
         name="new_listing_name"
         onChange={handleChange}
@@ -161,6 +160,7 @@ function AddListingForm({ handleChange, handleSubmit }) {
       <TextField
         label="Total"
         name="new_listing_total"
+        type="number"
         onChange={handleChange}
       />
       <div>
