@@ -49,7 +49,6 @@ if (env === "production") {
     if (!request.secure && request.get('x-forwarded-proto') !== 'https') {
       response.redirect("https://" + request.headers.host + request.url);
     }
-    next();
   });
 }
 
