@@ -127,6 +127,8 @@ app.post("/items", (req, res) => {
           res.send(item);
       },
       error => {
+          if (error.name === "ValidationError")
+            error = error.message
           res.status(400).send(error); // 400 for bad request
       }
   );
