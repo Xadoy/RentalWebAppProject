@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   List,
   ListItem,
   ListItemText,
   withStyles,
   Grid,
-  Paper,
-  Select,
-  FormControl,
   TextField,
   Button,
   Typography,
@@ -16,6 +13,14 @@ import {
 import { ListingsTable, UsersTable, RequestTable } from "./Table";
 import { getItems, addItem, delItem } from "../../actions/item";
 import "./styles.css";
+
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -149,19 +154,64 @@ class ManageView extends React.Component {
   }
 }
 
-function AddListingForm({ handleChange, handleSubmit }) {
+// reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
+const useInput = initialValue => {
+  const [value, setValue] = useState(initialValue);
+
+  return {
+    value,
+    setValue,
+    reset: () => setValue(initialValue),
+    bind: {
+      value,
+      onChange: event => {
+        setValue(event.target.value);
+      }
+    }
+  };
+};
+
+function AddListingForm({ afterSubmit }) {
+  const [error, setError] = useState();
+  const { value: name, bind: bindName, reset: resetName } = useInput("");
+  const {
+    value: totalNum,
+    bind: bindTotalNum,
+    reset: resetTotalNum
+  } = useInput("");
+  const {
+    value: description,
+    bind: bindDescription,
+    reset: resetDescription
+  } = useInput("");
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const item = {
+      name,
+      totalNum,
+      description
+    };
+    const response = await addItem(item).catch(error => setError(error.response.data));
+    resetName();
+    resetTotalNum();
+    resetDescription();
+    afterSubmit();
+  };
+  if (error) throw error;
   return (
     <StyledForm>
-      <TextField
-        label="Listing Name"
-        name="new_listing_name"
-        onChange={handleChange}
-      />
+      <TextField label="Listing Name" name="new_listing_name" {...bindName} />
       <TextField
         label="Total"
         name="new_listing_total"
         type="number"
-        onChange={handleChange}
+        {...bindTotalNum}
+      />
+      <TextField
+        label="Description"
+        name="new_listing_description"
+        {...bindDescription}
       />
       <div>
         <Button type="submit" onClick={handleSubmit}>
@@ -172,53 +222,23 @@ function AddListingForm({ handleChange, handleSubmit }) {
   );
 }
 
-// function createListingRow(name, total_num, rent_num, stock_num, due_num) {
-//   return { name, total_num, rent_num, stock_num, due_num };
-// }
-
 class ListingsView extends React.Component {
   state = {
-    listings: [
-      // createListingRow("Rune Scimitar", 200, 100, 24, 3),
-      // createListingRow("Rune 2 Handed Sword", 250, 9.0, 37, 4),
-      // createListingRow("White Party Hat", 300, 16, 24, 6),
-      // createListingRow("Saradomin Platebody", 305, 3, 67, 8),
-      // createListingRow("Royal Gala Apple", 356, 16, 49, 3)
-    ]
+    listings: []
   };
   componentDidMount() {
-    this.refreshList()
+    this.refreshList();
   }
 
   refreshList = () => {
     getItems().then(items => {
       this.setState({ listings: items });
-    })
-    .catch(error => {
-      console.log("Error:", error);
     });
-  }
-
-  handleChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  handleSubmit = async event => {
-    event.preventDefault();
-    const item = {
-        name: this.state.new_listing_name,
-        totalNum: this.state.new_listing_total,
-        description: "testing"
-    }
-    const response = await addItem(item);
-    this.refreshList()
   };
 
   removeListing(id) {
     delItem(id).then(items => {
-      this.refreshList()
-    }).catch(error => {
-      console.log("Error:", error);
+      this.refreshList();
     });
   }
 
@@ -231,10 +251,7 @@ class ListingsView extends React.Component {
           removeListing={this.removeListing.bind(this)}
         ></ListingsTable>
         <Typography variant="h6">Add new listing</Typography>
-        <AddListingForm
-          handleChange={this.handleChange.bind(this)}
-          handleSubmit={this.handleSubmit}
-        ></AddListingForm>
+        <AddListingForm afterSubmit={this.refreshList}></AddListingForm>
       </>
     );
   }
@@ -304,6 +321,69 @@ class RequestsView extends React.Component {
   }
 }
 
+// reference: https://material-ui.com/components/dialogs/
+function ErrorPrompt({ open, onClose, errorInfo }) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  return (
+    <Dialog
+      fullScreen={fullScreen}
+      open={open}
+      onClose={onClose}
+      aria-labelledby="responsive-dialog-title"
+    >
+      <DialogTitle id="responsive-dialog-title">{"Error"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{errorInfo}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={onClose} color="primary" autoFocus>
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+// reference: https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null, errorInfo: null };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // Catch errors in any components below and re-render with error message
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
+    // You can also log error messages to an error reporting service here
+  }
+
+  render() {
+    if (this.state.errorInfo) {
+      // Error path
+      console.log(this.state.error)
+      return (
+        <>
+          {this.props.children}
+          <ErrorPrompt
+            open={true}
+            onClose={() => {
+              this.setState({ error: null, errorInfo: null });
+            }}
+            errorInfo={this.state.error ? this.state.error.toString() : 'Something went wrong.'}
+          />
+        </>
+      );
+    }
+    // Normally, just render children
+    return this.props.children;
+  }
+}
+
 class AdminPanel extends React.Component {
   state = {
     username: "admin",
@@ -316,16 +396,18 @@ class AdminPanel extends React.Component {
     const { view } = this.props;
     return (
       <>
-        {view === "Manage" && (
-          <ManageView
-            username={this.state.username}
-            password={this.state.password}
-            onChange={this.handleSubmit.bind(this)}
-          />
-        )}
-        {view === "Listings" && <ListingsView />}
-        {view === "User Management" && <UserManagementView />}
-        {view === "Requests" && <RequestsView />}
+        <ErrorBoundary>
+          {view === "Manage" && (
+            <ManageView
+              username={this.state.username}
+              password={this.state.password}
+              onChange={this.handleSubmit.bind(this)}
+            />
+          )}
+          {view === "Listings" && <ListingsView />}
+          {view === "User Management" && <UserManagementView />}
+          {view === "Requests" && <RequestsView />}
+        </ErrorBoundary>
       </>
     );
   }
