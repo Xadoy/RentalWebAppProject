@@ -25,7 +25,6 @@ const StyledCell = withStyles(theme => ({
   }
 }))(TableCell);
 
-
 export function ListingsTable({ rows, removeListing }) {
   const classes = useStyles();
 
