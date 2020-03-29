@@ -1,4 +1,4 @@
-/* Student mongoose model */
+/* Item mongoose model */
 const mongoose = require("mongoose");
 
 const CommentSchema = new mongoose.Schema(

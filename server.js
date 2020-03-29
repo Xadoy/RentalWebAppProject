@@ -46,8 +46,8 @@ app.use(
 // redirect to https if runing on production env
 if (env === "production") {
   app.use(function(request, response, next) {
-    if (!request.secure && request.get('x-forwarded-proto') !== 'https') {
-      return response.redirect("https://" + request.get('host') + request.url);
+    if (!request.secure && request.get("x-forwarded-proto") !== "https") {
+      return response.redirect("https://" + request.get("host") + request.url);
     }
     next();
   });
@@ -55,43 +55,45 @@ if (env === "production") {
 
 // A route to login and create a session
 app.post("/users/login", (req, res) => {
-  // const email = req.body.email;
-  // const password = req.body.password;
-  // log(email, password);
-  // // Use the static method on the User model to find a user
-  // // by their email and password
-  // User.findByEmailPassword(email, password)
-  //     .then(user => {
-  //         // Add the user's id to the session cookie.
-  //         // We can check later if this exists to ensure we are logged in.
-  //         req.session.user = user._id;
-  //         req.session.email = user.email;
-  //         res.send({ currentUser: user.email });
-  //     })
-  //     .catch(error => {
-  //         res.status(400).send()
-  //     });
+  const userName = req.body.userName;
+  const password = req.body.password;
+  log(userName, password);
+  // Use the static method on the User model to find a user
+  // by their userName and password
+  User.findByUserNamePassword(userName, password)
+    .then(user => {
+      // Add the user's id to the session cookie.
+      // We can check later if this exists to ensure we are logged in.
+      req.session.user = user._id;
+      req.session.userName = user.userName;
+      res.send({ currentUser: user.userName });
+    })
+    .catch(error => {
+      res.status(400).send("The username or password is incorrect");
+    });
 });
 
 // A route to logout a user
 app.get("/users/logout", (req, res) => {
-  // // Remove the session
-  // req.session.destroy(error => {
-  //     if (error) {
-  //         res.status(500).send(error);
-  //     } else {
-  //         res.send()
-  //     }
-  // });
+  // Remove the session
+  req.session.destroy(error => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.send("You have been successfully logged out");
+    }
+  });
 });
 
 // A route to check if a use is logged in on the session cookie
 app.get("/users/check-session", (req, res) => {
-  // if (req.session.user) {
-  //     res.send({ currentUser: req.session.email });
-  // } else {
-  //     res.status(401).send();
-  // }
+  log("test")
+  if (req.session.user) {
+      log({ currentUser: req.session.userName });
+      res.send({ currentUser: req.session.userName });
+  } else {
+      res.status(401).send();
+  }
 });
 
 /*********************************************************/
@@ -103,55 +105,54 @@ app.get("/users/check-session", (req, res) => {
 // a GET route to get all students
 app.get("/items", (req, res) => {
   Item.find().then(
-      items => {
-          res.send({ items }); // can wrap in object if want to add more properties
-      },
-      error => {
-          res.status(500).send(error); // server error
-      }
+    items => {
+      res.send({ items }); // can wrap in object if want to add more properties
+    },
+    error => {
+      res.status(500).send(error); // server error
+    }
   );
 });
 app.post("/items", (req, res) => {
   // Create a new item
-  const {name, description, totalNum} = req.body
-  const comments = []
+  const { name, description, totalNum } = req.body;
+  const comments = [];
   const item = new Item({
-		name,
+    name,
     description,
     totalNum,
     comments
-	});
+  });
   // Save the item
   item.save().then(
     item => {
-          res.send(item);
-      },
-      error => {
-          if (error.name === "ValidationError")
-            error = error.message
-          res.status(400).send(error); // 400 for bad request
-      }
+      res.send(item);
+    },
+    error => {
+      if (error.name === "ValidationError") error = error.message;
+      res.status(400).send(error); // 400 for bad request
+    }
   );
 });
 app.delete("/items/:id", (req, res) => {
   const id = req.params.id;
   // Validate id
   if (!ObjectID.isValid(id)) {
-      res.status(404).send();
-      return;
+    res.status(404).send();
+    return;
   }
   // Delete a student by their id
   Item.findByIdAndRemove(id)
-      .then(item => {
-          if (!item) {
-              res.status(404).send();
-          } else {
-              res.send(item);
-          }
-      })
-      .catch(error => {
-          res.status(500).send(); // server error, could not delete.
-      });
+    .then(item => {
+      if (!item) {
+        res.status(404).send();
+      } else {
+        res.send(item);
+      }
+    })
+    .catch(error => {
+      res.status(500).send(); // server error, could not delete.
+    });
 });
 
 /** Student resource routes **/
@@ -265,22 +266,40 @@ app.patch("/students/:id", (req, res) => {
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app (*not* a student).
 app.post("/users", (req, res) => {
-  // log(req.body);
-  // // Create a new user
-  // const user = new User({
-  //     email: req.body.email,
-  //     password: req.body.password
-  // });
-  // // Save the user
-  // user.save().then(
-  //     user => {
-  //         res.send(user);
-  //     },
-  //     error => {
-  //         res.status(400).send(error); // 400 for bad request
-  //     }
-  // );
+  log(req.body);
+  // Create a new user
+  const user = new User({
+      userName: req.body.userName,
+      password: req.body.password
+  });
+  // Save the user
+  user.save().then(
+      user => {
+          res.send(user);
+      },
+      error => {
+          res.status(400).send(error); // 400 for bad request
+      }
+  );
 });
+
+// Middleware for authentication of resources
+const authenticate = (req, res, next) => {
+	if (req.session.user) {
+		User.findById(req.session.user).then((user) => {
+			if (!user) {
+				return Promise.reject()
+			} else {
+				req.user = user
+				next()
+			}
+		}).catch((error) => {
+			res.status(401).send("Unauthorized")
+		})
+	} else {
+		res.status(401).send("Unauthorized")
+	}
+}
 
 /*** Webpage routes below **********************************/
 // Serve the build
