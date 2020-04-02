@@ -11,9 +11,7 @@ const { mongoose } = require("./db/mongoose");
 mongoose.set("useFindAndModify", false); // for some deprecation issues
 
 // import the mongoose models
-const { Student } = require("./models/student");
-const { User } = require("./models/user");
-const { Item } = require("./models/item");
+const { User, Item } = require("./models");
 
 // to validate object IDs
 const { ObjectID } = require("mongodb");
@@ -115,13 +113,14 @@ app.get("/items", (req, res) => {
 });
 app.post("/items", (req, res) => {
   // Create a new item
-  const { name, description, totalNum } = req.body;
+  const { name, description, totalNum, image } = req.body;
   const comments = [];
   const item = new Item({
     name,
     description,
     totalNum,
-    comments
+    comments,
+    image
   });
   // Save the item
   item.save().then(

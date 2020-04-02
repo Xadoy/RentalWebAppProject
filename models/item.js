@@ -17,6 +17,17 @@ const CommentSchema = new mongoose.Schema(
   { timestamps: { createdAt: "createdAt" } }
 );
 
+const imageSchema = mongoose.Schema({
+  image_id: {
+    type: String,
+    required: true
+  },
+  image_url: {
+    type: String,
+    required: true
+  }
+});
+
 const ItemSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -46,9 +57,14 @@ const ItemSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  comments: [CommentSchema]
+  isRemoved: {
+    type: Boolean,
+    default: false
+  },
+  comments: [CommentSchema],
+  image: imageSchema
 });
 
 const Item = mongoose.model("Item", ItemSchema);
 
-module.exports = { Item };
+module.exports = Item;

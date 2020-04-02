@@ -51,10 +51,15 @@ function AddListingForm({ afterSubmit }) {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    const image = {
+      image_url: "http://res.cloudinary.com/dhjsvs4sg/image/upload/v1585792310/Mystery_Item_530x_2x_msqahv.png",
+      image_id: "Mystery_Item_530x_2x_msqahv"
+    }
     const item = {
       name,
       totalNum,
-      description
+      description,
+      image
     };
     const response = await addItem(item).catch(error =>
       setError(error.response.data)

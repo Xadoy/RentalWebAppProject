@@ -20,7 +20,23 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 4
-    }
+    },
+    score: {
+      type: Number,
+      default: 10
+    },
+    balance: {
+      type: Number,
+      default: 0
+    },
+    transactions: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transaction"
+    }],
+    isRemoved: {
+      type: Boolean,
+      default: false
+    },
   },
   { timestamps: { createdAt: "createdAt" } }
 );
@@ -71,4 +87,4 @@ UserSchema.statics.findByUserNamePassword = function(userName, password) {
 
 // make a model using the User schema
 const User = mongoose.model("User", UserSchema);
-module.exports = { User };
+module.exports = User;
