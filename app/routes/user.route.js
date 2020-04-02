@@ -10,7 +10,8 @@ module.exports = function(app) {
 
   // admin only
   // delete a user
+  app.delete("/api/users/:id", controller.delUser);
 
   // get all users
-  // app.get("/api/users", controller.getUsers);
+  app.get("/api/users", controller.getAllValidUsers);
 };
