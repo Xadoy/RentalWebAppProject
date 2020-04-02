@@ -3,8 +3,8 @@ const { Item } = require("../models");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
-exports.getItem = (req, res) => {
-  Item.find().then(
+exports.getAllValidItems = (req, res) => {
+  Item.find({ isRemoved: false }).then(
     items => {
       res.send({ items }); // can wrap in object if want to add more properties
     },
@@ -43,7 +43,11 @@ exports.delItem = (req, res) => {
     return;
   }
   // Delete a student by their id
-  Item.findByIdAndRemove(id)
+  Item.findOneAndUpdate(
+    { _id: id },
+    { $set: { isRemoved: true } },
+    { new: true }
+  )
     .then(item => {
       if (!item) {
         res.status(404).send();

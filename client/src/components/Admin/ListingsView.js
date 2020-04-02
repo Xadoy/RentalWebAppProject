@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { getItems, addItem, delItem } from "../../actions/item";
+import { getAllValidItems, addItem, delItem } from "../../actions/item";
 import { ListingsTable } from "./Table";
 import {
   withStyles,
@@ -101,7 +101,7 @@ class ListingsView extends React.Component {
   }
 
   refreshList = () => {
-    getItems().then(items => {
+    getAllValidItems().then(items => {
       this.setState({ listings: items });
     });
   };
