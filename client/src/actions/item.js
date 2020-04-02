@@ -4,7 +4,7 @@ import axios from "axios";
 // and then loop through them and add a list element for each item
 export const getItems = async () => {
   // the URL for the request
-  const url = "/items";
+  const url = "/api/items";
 
   const res = await axios.get(url)
   return res.data.items
@@ -23,7 +23,7 @@ export const getItems = async () => {
 // A function to send a POST request with a new item
 export const addItem = async (item) => {
   // the URL for the request
-  const url = "/items";
+  const url = "/api/items";
 
   const response = await axios.post(url, item);
   return response;
@@ -69,7 +69,7 @@ export const addItem = async (item) => {
 // A function to send a DELETE request with a item
 export const delItem = async (id) => {
   // the URL for the request
-  const url = "/items/" + id;
+  const url = "/api/items/" + id;
 
   const response = await axios.delete(url);
   return response;

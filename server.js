@@ -1,33 +1,41 @@
 /* server.js for team 45 */
 "use strict";
 const log = console.log;
-
 const express = require("express");
-// starting the express server
-const app = express();
+const config = require("./app/config");
+const cors = require('cors');
+const bodyParser = require("body-parser");
+const session = require("express-session");
 
-// mongoose and mongo connection
-const { mongoose } = require("./db/mongoose");
-mongoose.set("useFindAndModify", false); // for some deprecation issues
+const db = require("./app/models");
 
 // import the mongoose models
-const { User, Item } = require("./models");
-
+const { User, Item } = require("./app/models");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
-// body-parser: middleware for parsing HTTP JSON body into a usable object
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());
-
-// express-session for managing user sessions
-const session = require("express-session");
-app.use(bodyParser.urlencoded({ extended: true }));
+// starting the express server
+const app = express();
 
 // check if node is running on production env
 const env = process.env.NODE_ENV || "dev";
+// redirect to https if runing on production env
+if (env === "production") {
+  app.use(function(request, response, next) {
+    if (!request.secure && request.get("x-forwarded-proto") !== "https") {
+      return response.redirect("https://" + request.get("host") + request.url);
+    }
+    next();
+  });
+}
 
-/*** Session handling **************************************/
+// enable cors
+app.use(cors());
+
+// body-parser: middleware for parsing HTTP JSON body into a usable object
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Create a session cookie
 app.use(
   session({
@@ -41,18 +49,26 @@ app.use(
   })
 );
 
-// redirect to https if runing on production env
-if (env === "production") {
-  app.use(function(request, response, next) {
-    if (!request.secure && request.get("x-forwarded-proto") !== "https") {
-      return response.redirect("https://" + request.get("host") + request.url);
-    }
-    next();
+// mongoose and mongo connection
+db.mongoose
+  .connect(config.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    setupDB();
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
   });
-}
 
+/*** Session handling **************************************/
 // A route to login and create a session
-app.post("/users/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
   const userName = req.body.userName;
   const password = req.body.password;
   log(userName, password);
@@ -72,7 +88,7 @@ app.post("/users/login", (req, res) => {
 });
 
 // A route to logout a user
-app.get("/users/logout", (req, res) => {
+app.get("/api/users/logout", (req, res) => {
   // Remove the session
   req.session.destroy(error => {
     if (error) {
@@ -84,7 +100,7 @@ app.get("/users/logout", (req, res) => {
 });
 
 // A route to check if a use is logged in on the session cookie
-app.get("/users/check-session", (req, res) => {
+app.get("/api/users/check-session", (req, res) => {
   log("test")
   if (req.session.user) {
       log({ currentUser: req.session.userName });
@@ -101,7 +117,7 @@ app.get("/users/check-session", (req, res) => {
 //       You can (and should!) add this using similar middleware techniques we used in lecture.
 
 // a GET route to get all students
-app.get("/items", (req, res) => {
+app.get("/api/items", (req, res) => {
   Item.find().then(
     items => {
       res.send({ items }); // can wrap in object if want to add more properties
@@ -111,7 +127,7 @@ app.get("/items", (req, res) => {
     }
   );
 });
-app.post("/items", (req, res) => {
+app.post("/api/items", (req, res) => {
   // Create a new item
   const { name, description, totalNum, image } = req.body;
   const comments = [];
@@ -133,7 +149,7 @@ app.post("/items", (req, res) => {
     }
   );
 });
-app.delete("/items/:id", (req, res) => {
+app.delete("/api/items/:id", (req, res) => {
   const id = req.params.id;
   // Validate id
   if (!ObjectID.isValid(id)) {
@@ -264,7 +280,7 @@ app.patch("/students/:id", (req, res) => {
 
 /** User routes below **/
 // Set up a POST route to *create* a user of your web app (*not* a student).
-app.post("/users", (req, res) => {
+app.post("/api/users", (req, res) => {
   log(req.body);
   // Create a new user
   const user = new User({
@@ -315,3 +331,7 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   log(`Listening on port ${port}...`);
 });
+
+const setupDB = () => {
+  log("Setting up database");
+}
