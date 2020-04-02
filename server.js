@@ -3,16 +3,14 @@
 const log = console.log;
 const express = require("express");
 const config = require("./app/config");
-const cors = require('cors');
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 
 const db = require("./app/models");
 
 // import the mongoose models
-const { User, Item } = require("./app/models");
-// to validate object IDs
-const { ObjectID } = require("mongodb");
+const { User } = require("./app/models");
 
 // starting the express server
 const app = express();
@@ -66,255 +64,34 @@ db.mongoose
     process.exit();
   });
 
-/*** Session handling **************************************/
-// A route to login and create a session
-app.post("/api/users/login", (req, res) => {
-  const userName = req.body.userName;
-  const password = req.body.password;
-  log(userName, password);
-  // Use the static method on the User model to find a user
-  // by their userName and password
-  User.findByUserNamePassword(userName, password)
-    .then(user => {
-      // Add the user's id to the session cookie.
-      // We can check later if this exists to ensure we are logged in.
-      req.session.user = user._id;
-      req.session.userName = user.userName;
-      res.send({ currentUser: user.userName });
-    })
-    .catch(error => {
-      res.status(400).send("The username or password is incorrect");
-    });
-});
+// routes
+// Session handling
+require("./app/routes/session.route")(app);
 
-// A route to logout a user
-app.get("/api/users/logout", (req, res) => {
-  // Remove the session
-  req.session.destroy(error => {
-    if (error) {
-      res.status(500).send(error);
-    } else {
-      res.send("You have been successfully logged out");
-    }
-  });
-});
-
-// A route to check if a use is logged in on the session cookie
-app.get("/api/users/check-session", (req, res) => {
-  log("test")
-  if (req.session.user) {
-      log({ currentUser: req.session.userName });
-      res.send({ currentUser: req.session.userName });
-  } else {
-      res.status(401).send();
-  }
-});
-
-/*********************************************************/
-
-/*** API Routes below ************************************/
-// NOTE: The JSON routes (/students) are not protected (no authentication required).
-//       You can (and should!) add this using similar middleware techniques we used in lecture.
-
-// a GET route to get all students
-app.get("/api/items", (req, res) => {
-  Item.find().then(
-    items => {
-      res.send({ items }); // can wrap in object if want to add more properties
-    },
-    error => {
-      res.status(500).send(error); // server error
-    }
-  );
-});
-app.post("/api/items", (req, res) => {
-  // Create a new item
-  const { name, description, totalNum, image } = req.body;
-  const comments = [];
-  const item = new Item({
-    name,
-    description,
-    totalNum,
-    comments,
-    image
-  });
-  // Save the item
-  item.save().then(
-    item => {
-      res.send(item);
-    },
-    error => {
-      if (error.name === "ValidationError") error = error.message;
-      res.status(400).send(error); // 400 for bad request
-    }
-  );
-});
-app.delete("/api/items/:id", (req, res) => {
-  const id = req.params.id;
-  // Validate id
-  if (!ObjectID.isValid(id)) {
-    res.status(404).send();
-    return;
-  }
-  // Delete a student by their id
-  Item.findByIdAndRemove(id)
-    .then(item => {
-      if (!item) {
-        res.status(404).send();
-      } else {
-        res.send(item);
-      }
-    })
-    .catch(error => {
-      res.status(500).send(); // server error, could not delete.
-    });
-});
-
-/** Student resource routes **/
-// a POST route to *create* a student
-app.post("/students", (req, res) => {
-  // // log(req.body)
-  // // Create a new student using the Student mongoose model
-  // const student = new Student({
-  //     name: req.body.name,
-  //     year: req.body.year
-  // });
-  // // Save student to the database
-  // student.save().then(
-  //     result => {
-  //         res.send(result);
-  //     },
-  //     error => {
-  //         res.status(400).send(error); // 400 for bad request
-  //     }
-  // );
-});
-
-// a GET route to get all students
-app.get("/students", (req, res) => {
-  // Student.find().then(
-  //     students => {
-  //         log();
-  //         res.send({ students }); // can wrap in object if want to add more properties
-  //     },
-  //     error => {
-  //         res.status(500).send(error); // server error
-  //     }
-  // );
-});
-
-/// a GET route to get a student by their id.
-// id is treated as a wildcard parameter, which is why there is a colon : beside it.
-// (in this case, the database id, but you can make your own id system for your project)
-app.get("/students/:id", (req, res) => {
-  // /// req.params has the wildcard parameters in the url, in this case, id.
-  // // log(req.params.id)
-  // const id = req.params.id;
-  // // Good practise: Validate id immediately.
-  // if (!ObjectID.isValid(id)) {
-  //     res.status(404).send(); // if invalid id, definitely can't find resource, 404.
-  //     return;
-  // }
-  // // Otherwise, findById
-  // Student.findById(id)
-  //     .then(student => {
-  //         if (!student) {
-  //             res.status(404).send(); // could not find this student
-  //         } else {
-  //             /// sometimes we wrap returned object in another object:
-  //             //res.send({student})
-  //             res.send(student);
-  //         }
-  //     })
-  //     .catch(error => {
-  //         res.status(500).send(); // server error
-  //     });
-});
-
-/// a DELETE route to remove a student by their id.
-app.delete("/students/:id", (req, res) => {
-  // const id = req.params.id;
-  // // Validate id
-  // if (!ObjectID.isValid(id)) {
-  //     res.status(404).send();
-  //     return;
-  // }
-  // // Delete a student by their id
-  // Student.findByIdAndRemove(id)
-  //     .then(student => {
-  //         if (!student) {
-  //             res.status(404).send();
-  //         } else {
-  //             res.send(student);
-  //         }
-  //     })
-  //     .catch(error => {
-  //         res.status(500).send(); // server error, could not delete.
-  //     });
-});
-
-// a PATCH route for changing properties of a resource.
-// (alternatively, a PUT is used more often for replacing entire resources).
-app.patch("/students/:id", (req, res) => {
-  // const id = req.params.id;
-  // // get the updated name and year only from the request body.
-  // const { name, year } = req.body;
-  // const body = { name, year };
-  // if (!ObjectID.isValid(id)) {
-  //     res.status(404).send();
-  //     return;
-  // }
-  // // Update the student by their id.
-  // Student.findByIdAndUpdate(id, { $set: body }, { new: true })
-  //     .then(student => {
-  //         if (!student) {
-  //             res.status(404).send();
-  //         } else {
-  //             res.send(student);
-  //         }
-  //     })
-  //     .catch(error => {
-  //         res.status(400).send(); // bad request for changing the student.
-  //     });
-});
-
-/** User routes below **/
-// Set up a POST route to *create* a user of your web app (*not* a student).
-app.post("/api/users", (req, res) => {
-  log(req.body);
-  // Create a new user
-  const user = new User({
-      userName: req.body.userName,
-      password: req.body.password
-  });
-  // Save the user
-  user.save().then(
-      user => {
-          res.send(user);
-      },
-      error => {
-          res.status(400).send(error); // 400 for bad request
-      }
-  );
-});
+// User routes
+require("./app/routes/user.route")(app);
+// Item resource route
+require("./app/routes/item.route")(app);
 
 // Middleware for authentication of resources
 const authenticate = (req, res, next) => {
-	if (req.session.user) {
-		User.findById(req.session.user).then((user) => {
-			if (!user) {
-				return Promise.reject()
-			} else {
-				req.user = user
-				next()
-			}
-		}).catch((error) => {
-			res.status(401).send("Unauthorized")
-		})
-	} else {
-		res.status(401).send("Unauthorized")
-	}
-}
+  if (req.session.user) {
+    User.findById(req.session.user)
+      .then(user => {
+        if (!user) {
+          return Promise.reject();
+        } else {
+          req.user = user;
+          next();
+        }
+      })
+      .catch(error => {
+        res.status(401).send("Unauthorized");
+      });
+  } else {
+    res.status(401).send("Unauthorized");
+  }
+};
 
 /*** Webpage routes below **********************************/
 // Serve the build
@@ -332,6 +109,22 @@ app.listen(port, () => {
   log(`Listening on port ${port}...`);
 });
 
+// setup the db for first time running
 const setupDB = () => {
   log("Setting up database");
-}
+  User.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new User({
+        userName: config.adminName,
+        password: config.adminPassword,
+        isAdmin: true
+      }).save(err => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added admin account with default username and password");
+      });
+    }
+  });
+};

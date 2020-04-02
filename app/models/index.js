@@ -1,7 +1,7 @@
 module.exports = {
-  Item: require("./item"),
-  User: require("./user"),
-  ItemRequest: require("./itemRequest"),
-  Transaction: require("./transaction"),
+  Item: require("./item.model"),
+  User: require("./user.model"),
+  ItemRequest: require("./itemRequest.model"),
+  Transaction: require("./transaction.model"),
   mongoose: require('mongoose')
 }
