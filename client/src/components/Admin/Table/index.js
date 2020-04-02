@@ -38,6 +38,7 @@ export function ListingsTable({ rows, removeListing }) {
             <StyledCell align="right">Rented Out</StyledCell>
             <StyledCell align="right">In Stock</StyledCell>
             <StyledCell align="right">Due</StyledCell>
+            <StyledCell align="center">edit</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -50,8 +51,7 @@ export function ListingsTable({ rows, removeListing }) {
               <StyledCell align="right">{row.rentNum}</StyledCell>
               <StyledCell align="right">{row.stockNum}</StyledCell>
               <StyledCell align="right">{row.dueNum}</StyledCell>
-              <StyledCell align="right">
-                {" "}
+              <StyledCell align="center">
                 <Button
                   color="secondary"
                   onClick={() => removeListing(row._id)}
@@ -79,6 +79,7 @@ export function UsersTable({ rows, removeUser }) {
             <StyledCell align="right">Last Login</StyledCell>
             <StyledCell align="right">Score</StyledCell>
             <StyledCell align="right">Created at</StyledCell>
+            <StyledCell align="center">edit</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,8 +91,7 @@ export function UsersTable({ rows, removeUser }) {
               <StyledCell align="right">{row.last_login}</StyledCell>
               <StyledCell align="right">{row.score}</StyledCell>
               <StyledCell align="right">{row.create_at}</StyledCell>
-              <StyledCell align="right">
-                {" "}
+              <StyledCell align="center">
                 <Button color="secondary" onClick={() => removeUser(row.name)}>
                   remove
                 </Button>
@@ -113,9 +113,9 @@ export function RequestTable({ rows, approveRequest }) {
         <TableHead>
           <TableRow>
             <StyledCell>Items</StyledCell>
-            <StyledCell align="right">Last Login</StyledCell>
             <StyledCell align="right">Request Count</StyledCell>
             <StyledCell align="right">Price</StyledCell>
+            <StyledCell align="center">edit</StyledCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -126,8 +126,7 @@ export function RequestTable({ rows, approveRequest }) {
               </StyledCell>
               <StyledCell align="right">{row.request_count}</StyledCell>
               <StyledCell align="right">{row.price}</StyledCell>
-              <StyledCell align="right">
-                {" "}
+              <StyledCell align="center">
                 <Button
                   color="secondary"
                   onClick={() => approveRequest(row.name)}
