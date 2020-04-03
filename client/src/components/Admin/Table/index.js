@@ -11,6 +11,7 @@ import {
   Button,
   withStyles
 } from "@material-ui/core";
+import { parseISO, format } from "date-fns";
 
 const useStyles = makeStyles({
   table: {
@@ -70,13 +71,14 @@ export function ListingsTable({ rows, removeListing }) {
 export function UsersTable({ rows, removeUser }) {
   const classes = useStyles();
 
+  console.log(rows);
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
             <StyledCell>Users</StyledCell>
-            <StyledCell align="right">Last Login</StyledCell>
+            <StyledCell align="right">Balance</StyledCell>
             <StyledCell align="right">Score</StyledCell>
             <StyledCell align="right">Created at</StyledCell>
             <StyledCell align="center">edit</StyledCell>
@@ -84,15 +86,17 @@ export function UsersTable({ rows, removeUser }) {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.name}>
+            <TableRow key={row._id}>
               <StyledCell component="th" scope="row">
-                {row.name}
+                {row.userName}
               </StyledCell>
-              <StyledCell align="right">{row.last_login}</StyledCell>
+              <StyledCell align="right">{row.balance}</StyledCell>
               <StyledCell align="right">{row.score}</StyledCell>
-              <StyledCell align="right">{row.create_at}</StyledCell>
+              <StyledCell align="right">
+                {format(parseISO(row.createdAt), "yyyy-MM-dd")}
+              </StyledCell>
               <StyledCell align="center">
-                <Button color="secondary" onClick={() => removeUser(row.name)}>
+                <Button color="secondary" onClick={() => removeUser(row._id)}>
                   remove
                 </Button>
               </StyledCell>

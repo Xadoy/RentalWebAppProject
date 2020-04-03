@@ -6,10 +6,11 @@ import {
   Button,
   Typography
 } from "@material-ui/core";
-import {UsersTable, RequestTable } from "./Table";
+import { RequestTable } from "./Table";
 import ErrorBoundary from "../ErrorBoundary";
 import Sidebar from "./SideBar";
 import ListingsView from "./ListingsView";
+import UserManagementView from "./UserManagementView";
 import "./styles.css";
 
 const StyledForm = withStyles(theme => ({
@@ -75,39 +76,6 @@ class ManageView extends React.Component {
           onSubmit={this.props.onChange}
           username={this.props.username}
           password={this.props.password}
-        />
-      </>
-    );
-  }
-}
-
-function createUserRow(name, last_login, score, create_at) {
-  return { name, last_login, score, create_at };
-}
-
-class UserManagementView extends React.Component {
-  state = {
-    users: [
-      createUserRow("user1", "20190910", 10, "20150910"),
-      createUserRow("user2", "20170820", 10, "20170215"),
-      createUserRow("user3", "20160530", 8, "20130211"),
-      createUserRow("user4", "20190313", 3, "20190113"),
-      createUserRow("user5", "20200220", 9, "20200120")
-    ]
-  };
-
-  removeUser(name) {
-    this.setState({
-      users: this.state.users.filter(u => u.name !== name)
-    });
-  }
-  render() {
-    return (
-      <>
-        <Typography variant="h5">UserManagementView</Typography>
-        <UsersTable
-          rows={this.state.users}
-          removeUser={this.removeUser.bind(this)}
         />
       </>
     );
