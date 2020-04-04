@@ -1,15 +1,17 @@
 import "date-fns";
 import {startOfToday, addDays, differenceInDays} from "date-fns";
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
+import {Grid, Button} from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
+import {addTransaction} from "../../actions/transaction"
 
 // reference:https://material-ui.com/components/pickers/
-function DatePicker({ unitCost }) {
+function DatePicker({ unitCost, item_id, afterSubmit }) {
+  const [error, setError] = useState();
   const today = startOfToday();
   const [selectedDate, setSelectedDate] = useState(
     new Date(today)
@@ -33,7 +35,19 @@ function DatePicker({ unitCost }) {
   const getCost = () => {
     return getDateDiff() * unitCost;
   };
-
+  const handleSubmit = async event => {
+    event.preventDefault();
+    const transaction = {
+      startAt: selectedDate,
+      endAt: selectedDate2,
+      item: item_id
+    };
+    const res = await addTransaction(transaction).catch(error =>
+      setError(error.response.data)
+    );
+    afterSubmit();
+  };
+  if (error) throw error;
   return (
     <>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -67,6 +81,9 @@ function DatePicker({ unitCost }) {
         </Grid>
       </MuiPickersUtilsProvider>
         <div>Days: {getDateDiff()}</div>
+        <div>Daily cost: ${unitCost}</div>
+        <div>Cost: ${getCost()}</div>
+        <Button onClick={handleSubmit}>Confirm Order</Button>
     </>
   );
 }
@@ -88,7 +105,7 @@ class Order extends React.Component {
     // form.addEventListener("submit", handle_submit);
   }
   render() {
-    return <DatePicker></DatePicker>;
+    return <DatePicker item_id={this.props.item_id} unitCost={10}/>;
     return (
       <div className={"order-container"}>
         <p>
@@ -128,15 +145,6 @@ class Order extends React.Component {
   purchase() {
     console.log("Transaction made");
     console.log(this.state.cost * this.state.days);
-  }
-
-  // from stack overflow
-  get_today() {
-    let today = new Date();
-    const dd = String(today.getDate()).padStart(2, "0");
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    const yyyy = today.getFullYear();
-    return yyyy + "-" + mm + "-" + dd;
   }
 }
 

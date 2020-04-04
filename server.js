@@ -72,6 +72,8 @@ require("./app/routes/session.route")(app);
 require("./app/routes/user.route")(app);
 // Item resource route
 require("./app/routes/item.route")(app);
+// Transaction resource route
+require("./app/routes/transaction.route")(app);
 
 // Middleware for authentication of resources
 const authenticate = (req, res, next) => {

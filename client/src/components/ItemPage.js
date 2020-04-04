@@ -24,7 +24,7 @@ function Item() {
     <div>
       Current Item: {item.name}
       <Pics image_url={item.image.image_url} name={item.name}/>
-      <Order id={item._id}/>
+      <Order item_id={item._id}/>
       <Desc description={item.description}/>
       {/* <Comments user={"current user"} /> */}
     </div>
