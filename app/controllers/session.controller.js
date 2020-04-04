@@ -7,14 +7,15 @@ exports.loginSession = (req, res) => {
   // Use the static method on the User model to find a user
   // by their userName and password
   User.findByUserNamePassword(userName, password)
-    .then(user => {
+    .then((user) => {
+      if (user.isRemoved) return Promise.reject();
       // Add the user's id to the session cookie.
       // We can check later if this exists to ensure we are logged in.
       req.session.user = user._id;
       req.session.userName = user.userName;
       res.send({ currentUser: user.userName });
     })
-    .catch(error => {
+    .catch((error) => {
       res.status(400).send("The username or password is incorrect");
     });
 };
@@ -22,7 +23,7 @@ exports.loginSession = (req, res) => {
 // A route to logout a user
 exports.logoutSession = (req, res) => {
   // Remove the session
-  req.session.destroy(error => {
+  req.session.destroy((error) => {
     if (error) {
       res.status(500).send(error);
     } else {
