@@ -70,8 +70,7 @@ export function ListingsTable({ rows, removeListing }) {
 
 export function UsersTable({ rows, removeUser }) {
   const classes = useStyles();
-
-  console.log(rows);
+  
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">

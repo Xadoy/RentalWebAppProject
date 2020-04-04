@@ -1,97 +1,153 @@
-import React from 'react';  
-import './App.css';  
+import React, { useState } from "react";
+import "./App.css";
+import { login, logout } from "./actions/session";
+import { addUser } from "./actions/user";
+import {
+  withStyles,
+  Grid,
+  TextField,
+  Button,
+  Typography,
+} from "@material-ui/core";
+import { useInput } from "./components/Utility"
 
-class Popup extends React.Component {  
-    constructor(props){
-        super(props);
-        this.state = { signUp: false }; // start with sign in page
-    }
-    
-    toggleSignUp () {
-        this.setState({ signUp: !this.state.signUp });
-    }
+class Popup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { signUp: false }; // start with sign in page
+  }
 
-    render() {  
-    return (  
-    <div className='popup_background'>  
-        <div className='popup_inner'>  
-            <h1>Sign {this.state.signUp ? 'up' : 'in'}</h1>
-            {this.state.signUp ? <SignUpForm toggle={this.toggleSignUp.bind(this)}
-                                login={this.props.login}
-                                closePopup={this.props.closePopup}/> : 
-                                <SignInForm toggle={this.toggleSignUp.bind(this)}
-                                login={this.props.login}/>}
-            <button onClick={this.props.closePopup}>close</button> 
-        </div>  
-    </div>  
-    );  
-    }  
-}
+  toggleSignUp() {
+    this.setState({ signUp: !this.state.signUp });
+  }
 
-class SignInForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            user : '',
-            pass : ''
-        }
-
-        this.verifyLogin = this.verifyLogin.bind(this);
-        this.handleUser = this.handleUser.bind(this);
-        this.handlePass = this.handlePass.bind(this);
-    }
-
-    verifyLogin (event){
-        // alert('user: ' + this.state.user + ' pass: ' + this.state.pass);
-        if (this.state.user == 'master' && this.state.pass == 'masterpassword'){
-            this.props.login();
-            alert('sign in successful');
-            //this.props.closePopup();
-        }
-        else{
-            alert('incorrect username or password');
-        }
-        event.preventDefault();
-    }
-
-    handleUser(event) {
-        this.setState({user: event.target.value});
-    }
-    
-    handlePass(event) {
-        this.setState({pass: event.target.value});
-    }
-    
-    render(){
-        return (
-        <div> 
-            <form onSubmit={this.verifyLogin}>
-                        <input type="text" value={this.state.user} onChange={this.handleUser} placeholder={"Username"}/>
-                        <input type="password" value={this.state.pass} onChange={this.handlePass} placeholder={"Password"}/>
-                        <input type={"submit"} value={"sign in"}/>
-            </form>
-
-            <button onClick={this.props.toggle}> Sign up </button>
+  render() {
+    return (
+      <div className="popup_background">
+        <div className="popup_inner">
+          <h1>Sign {this.state.signUp ? "up" : "in"}</h1>
+          {this.state.signUp ? (
+            <SignUpForm
+              toggle={this.toggleSignUp.bind(this)}
+              login={this.props.login}
+              closePopup={this.props.closePopup}
+            />
+          ) : (
+            <SignInForm
+              toggle={this.toggleSignUp.bind(this)}
+              login={this.props.login}
+            />
+          )}
+          <button onClick={this.props.closePopup}>close</button>
         </div>
-        );
-    }
+      </div>
+    );
+  }
 }
 
-class SignUpForm extends React.Component {
-    render(){
-        return (
-        <div> 
-            <form action={"sign up"}>
-                        <input type={"text"} name={"email"} placeholder={"Email"}/>
-                        <input type={"text"} name={"user"} placeholder={"Username"}/>
-                        <input type={"text"} name={"pass"} placeholder={"Password"}/>
-                        <input type={"text"} name={"confirmPass"} placeholder={"Confim password"}/>
-                        <input type={"submit"} value={"sign up"}/>
-            </form>
-            <button onClick={this.props.toggle}> Back to sign in </button>
-        </div>
-        );
-    }
+function SignInForm({ toggle, afterSubmit }) {
+  const [error, setError] = useState();
+  const {
+    value: userName,
+    bind: bindUserName,
+    reset: resetUserName,
+  } = useInput("");
+  const {
+    value: password,
+    bind: bindPassword,
+    reset: resetPassword,
+  } = useInput("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const user = {
+      userName,
+      password,
+    };
+    const res = await login(user).catch((error) =>
+      setError(error.response.data)
+    );
+    resetUserName();
+    resetPassword();
+    afterSubmit();
+  };
+  if (error) throw error;
+  return (
+    <Grid>
+      <TextField label="Username" name="user_name" {...bindUserName} />
+      <TextField
+        label="Password"
+        name="password"
+        type="password"
+        {...bindPassword}
+      />
+      <div>
+        <Button type="submit" onClick={handleSubmit}>
+          Sign in
+        </Button>
+        <Button onClick={toggle}>No account? Create one!</Button>
+      </div>
+    </Grid>
+  );
 }
 
-export default Popup; 
+function SignUpForm({ toggle, afterSubmit }) {
+  const [error, setError] = useState();
+  const {
+    value: userName,
+    bind: bindUserName,
+    reset: resetUserName,
+  } = useInput("");
+  const {
+    value: password,
+    bind: bindPassword,
+    reset: resetPassword,
+  } = useInput("");
+  const {
+    value: password2,
+    bind: bindPassword2,
+    reset: resetPassword2,
+  } = useInput("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (password !== password2) setError("password does not match");
+    const user = {
+      userName,
+      password,
+    };
+    const res = await addUser(user).catch((error) =>
+      setError(error.response.data)
+    );
+    resetUserName();
+    resetPassword();
+    resetPassword2();
+    afterSubmit();
+  };
+  if (error) throw error;
+  return (
+    <Grid>
+      <TextField label="Username" name="new_user_name" {...bindUserName} />
+      <TextField
+        label="Password"
+        name="new_password"
+        type="password"
+        {...bindPassword}
+      />
+      <TextField
+        label="Confirm password"
+        name="new_password2"
+        type="password"
+        {...bindPassword2}
+      />
+      <div>
+        <Button type="submit" onClick={handleSubmit}>
+          Sign up
+        </Button>
+        <Button onClick={toggle}>Sign in instead</Button>
+      </div>
+    </Grid>
+  );
+}
+
+export default Popup;

@@ -9,6 +9,7 @@ import {
   Button,
   Typography
 } from "@material-ui/core";
+import { useInput } from "../Utility"
 
 const StyledForm = withStyles(theme => ({
   root: {
@@ -20,21 +21,6 @@ const StyledForm = withStyles(theme => ({
 }))(Grid);
 
 // reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
-const useInput = initialValue => {
-  const [value, setValue] = useState(initialValue);
-
-  return {
-    value,
-    setValue,
-    reset: () => setValue(initialValue),
-    bind: {
-      value,
-      onChange: event => {
-        setValue(event.target.value);
-      }
-    }
-  };
-};
 function AddListingForm({ afterSubmit }) {
   const [error, setError] = useState();
   const { value: name, bind: bindName, reset: resetName } = useInput("");

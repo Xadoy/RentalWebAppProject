@@ -10,6 +10,7 @@ import NavBar from "./components/NavigationBar";
 import Admin from "./components/Admin";
 
 import Popup from "./popup.js";
+import { checkSession } from "./actions/session";
 /* ###################################################################################################################
 
 Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
@@ -27,31 +28,47 @@ Admin page                                      - unfinished
 
 class App extends React.Component {
   // I'd like to keep all the link routing here
-  constructor(props){  
-    super(props);  
-    this.state = { showPopup: false, loggedIn: false };  
-    }
-   
-    togglePopup() {
-        this.setState({  
-            showPopup: !this.state.showPopup
-       });  
-    }
+  constructor(props) {
+    super(props);
+    this.state = { showPopup: false, loggedIn: false, currentUser: null };
+  }
 
-    login() {
-        this.setState({  
-            loggedIn: !this.state.loggedIn
-       });  
-    }
+  componentDidMount() {
+    checkSession().then((user) => {
+      console.log(user)
+      this.setState({ currentUser: user });
+    });
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup,
+    });
+  }
+
+  login() {
+    this.setState({
+      loggedIn: !this.state.loggedIn,
+    });
+  }
 
   render() {
     const notInAdmin = /^(?!.*(\/admin)).*$/;
     return (
       <Router>
         <div className={"App"}>
-          <Route path={notInAdmin} exact strict render={() => <NavBar togglePopup={this.togglePopup.bind(this)} 
-                                                                    loggedIn={this.state.loggedIn}
-                                                                    logout={this.login.bind(this)}/>}/>
+          <Route
+            path={notInAdmin}
+            exact
+            strict
+            render={() => (
+              <NavBar
+                togglePopup={this.togglePopup.bind(this)}
+                loggedIn={this.state.loggedIn}
+                logout={this.login.bind(this)}
+              />
+            )}
+          />
           <Switch>
             <Route path={"/"} exact strict component={Home} />
             <Route path={"/catalogue"} exact strict component={Catalogue} />
@@ -60,15 +77,17 @@ class App extends React.Component {
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
-            {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
-            {this.state.showPopup && <Popup closePopup={this.togglePopup.bind(this)}
-                                            login={this.login.bind(this)}/>}  
-          
+          {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
+          {this.state.showPopup && (
+            <Popup
+              closePopup={this.togglePopup.bind(this)}
+              login={this.login.bind(this)}
+            />
+          )}
         </div>
       </Router>
     );
   }
-  
 }
 
 export default App;
