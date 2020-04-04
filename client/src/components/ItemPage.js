@@ -16,17 +16,17 @@ function Item() {
       console.log(item)
       setItem(item);
     });
-  }, []);
+  }, [item_id]);
 
 
   if (!item) return <div>loading...</div>
   return (
     <div>
       Current Item: {item.name}
-      {/* <Pics />
-      <Order />
-      <Desc />
-      <Comments user={"current user"} /> */}
+      <Pics image_url={item.image.image_url} name={item.name}/>
+      <Order id={item._id}/>
+      <Desc description={item.description}/>
+      {/* <Comments user={"current user"} /> */}
     </div>
   );
 }
