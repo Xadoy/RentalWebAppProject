@@ -10,6 +10,14 @@ export const getAllValidItems = async () => {
   return res.data.items
 };
 
+export const getItem = async (id) => {
+  // the URL for the request
+  const url = "/api/items/" + id;
+
+  const res = await axios.get(url)
+  return res.data.item
+};
+
 // A function to send a POST request with a new item
 export const addItem = async (item) => {
   // the URL for the request

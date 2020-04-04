@@ -3,16 +3,30 @@ const { Item } = require("../models");
 // to validate object IDs
 const { ObjectID } = require("mongodb");
 
-exports.getAllValidItems = (req, res) => {
-  Item.find({ isRemoved: false }).then(
-    items => {
-      res.send({ items }); // can wrap in object if want to add more properties
+exports.getItem = (req, res) => {
+  const id = req.params.id;
+  Item.find({ _id: id, isRemoved: false }).then(
+    (item) => {
+      item = item[0];
+      res.send({ item });
     },
-    error => {
+    (error) => {
       res.status(500).send(error); // server error
     }
   );
 };
+
+exports.getAllValidItems = (req, res) => {
+  Item.find({ isRemoved: false }).then(
+    (items) => {
+      res.send({ items });
+    },
+    (error) => {
+      res.status(500).send(error); // server error
+    }
+  );
+};
+
 exports.addItem = (req, res) => {
   // Create a new item
   const { name, description, totalNum, image } = req.body;
@@ -22,14 +36,14 @@ exports.addItem = (req, res) => {
     description,
     totalNum,
     comments,
-    image
+    image,
   });
   // Save the item
   item.save().then(
-    item => {
+    (item) => {
       res.send(item);
     },
-    error => {
+    (error) => {
       if (error.name === "ValidationError") error = error.message;
       res.status(400).send(error); // 400 for bad request
     }
@@ -48,14 +62,14 @@ exports.delItem = (req, res) => {
     { $set: { isRemoved: true } },
     { new: true }
   )
-    .then(item => {
+    .then((item) => {
       if (!item) {
         res.status(404).send();
       } else {
         res.send(item);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       res.status(500).send(); // server error, could not delete.
     });
 };
