@@ -5,7 +5,7 @@ const { ObjectID } = require("mongodb");
 
 exports.getItem = (req, res) => {
   const id = req.params.id;
-  Item.find({ _id: id, isRemoved: false }).then(
+  Item.find({ _id: id, isRemoved: false }).populate("comments.creator", "userName -_id").then(
     (item) => {
       item = item[0];
       res.send({ item });
@@ -71,5 +71,57 @@ exports.delItem = (req, res) => {
     })
     .catch((error) => {
       res.status(500).send(); // server error, could not delete.
+    });
+};
+
+// For comments:
+exports.addCommentToItem = (req, res) => {
+  const id = req.params.id;
+
+  if (!ObjectID.isValid(id)) {
+    res.status(404).send();
+    return;
+  }
+
+  // Otherwise, findById
+  Item.findById(id)
+    .then((item) => {
+      if (!item) {
+        res.status(404).send(); // could not find this restaurant
+      } else {
+        const comment = {
+          content: req.body.content,
+          creator: req.user,
+        };
+        item.comments.push(comment);
+        item.save().then(
+          (result) => {
+            res.send(item);
+          },
+          (error) => {
+            res.status(400).send(error); // 400 for bad request
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      res.status(500).send(); // server error
+    });
+};
+
+exports.getCommentsOfItem = (req, res) => {
+  const id = req.params.id;
+  Item.findById(id)
+    .populate("comments.creator", "userName -_id")
+    .then((item) => {
+      if (!item) {
+        res.status(404).send(); // could not find this restaurant
+      } else {
+        res.send(item.comments);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send(); // server error
     });
 };

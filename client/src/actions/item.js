@@ -35,3 +35,20 @@ export const delItem = async (id) => {
   const response = await axios.delete(url);
   return response;
 };
+
+
+// comments:
+export const addCommentToItem = async (item_id, comment) => {
+  // the URL for the request
+  const url = "/api/items/" + item_id + "/comments";
+
+  const response = await axios.post(url, comment);
+  return response;
+};
+export const getCommentsOfItem = async (item_id) => {
+  // the URL for the request
+  const url = "/api/items/" + item_id + "/comments";
+
+  const res = await axios.get(url)
+  return res.data.comments;
+};

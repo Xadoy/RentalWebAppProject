@@ -1,7 +1,7 @@
-// import the mongoose models
 const controller = require("../controllers/item.controller");
+const { auth } = require("../middlewares");
 
-module.exports = function(app) {
+module.exports = function (app) {
   // a GET route to get all items
   app.get("/api/items", controller.getAllValidItems);
 
@@ -9,4 +9,12 @@ module.exports = function(app) {
 
   app.post("/api/items", controller.addItem);
   app.delete("/api/items/:id", controller.delItem);
+
+  // comments
+  app.get("/api/items/:id/comments", controller.getCommentsOfItem);
+  app.post(
+    "/api/items/:id/comments",
+    auth.authenticate,
+    controller.addCommentToItem
+  );
 };
