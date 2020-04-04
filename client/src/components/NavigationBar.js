@@ -26,13 +26,11 @@ class NavBar extends React.Component {
               <button onClick={this.props.togglePopup}>Sign-in</button>
             </li>
           )}
-          {this.props.currentUser && this.props.currentUser !== "admin" && (
+          {this.props.currentUser && (
             <li>
               <button onClick={this.props.logout}>Log out</button>
             </li>
           )}
-          {/* TODO: temporary entry point of admin page
-                    once sign-in pop-up is finished, this should be changed*/}
           {this.props.currentUser && this.props.currentUser === "admin" && (
             <li>
               <Link to={"/admin"}>

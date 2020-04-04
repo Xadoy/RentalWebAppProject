@@ -11,12 +11,18 @@ function Item() {
   const { item_id } = useParams();
   const [item, setItem] = useState(null);
 
+  // reference:https://stackoverflow.com/questions/46240647/react-how-can-i-force-render-a-function-component
+  const [updateNow, setUpdateNow] = useState(true)
+
+  const updateFunc = () => {
+    setUpdateNow(!updateNow)
+  }
+
   useEffect(() => {
     getItem(item_id).then(item => {
-      console.log(item)
       setItem(item);
     });
-  }, [item_id]);
+  }, [item_id, updateNow]);
 
 
   if (!item) return <div>loading...</div>
@@ -26,7 +32,7 @@ function Item() {
       <Pics image_url={item.image.image_url} name={item.name}/>
       <Order item_id={item._id}/>
       <Desc description={item.description}/>
-      <Comments item_id={item._id} comments={item.comments}/>
+      <Comments item_id={item._id} comments={item.comments} afterSubmit={updateFunc}/>
     </div>
   );
 }
