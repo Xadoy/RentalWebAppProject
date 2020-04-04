@@ -10,7 +10,7 @@ import NavBar from "./components/NavigationBar";
 import Admin from "./components/Admin";
 
 import Popup from "./popup.js";
-import { checkSession } from "./actions/session";
+import { checkSession, logout } from "./actions/session";
 /* ###################################################################################################################
 
 Everyone should take whatever component/classes relevant to them and create a new .js file for them in the components
@@ -33,22 +33,27 @@ class App extends React.Component {
     this.state = { showPopup: false, loggedIn: false, currentUser: null };
   }
 
-  componentDidMount() {
+  checkUserSession = () => {
     checkSession().then((user) => {
       console.log(user)
       this.setState({ currentUser: user });
-    });
+    }).catch(err => {});
+  }
+
+  userLogOut = () => {
+    logout().then((res) => {
+      console.log(res)
+      this.setState({ currentUser: null });
+    }).catch(err => {});
+  }
+
+  componentDidMount() {
+    this.checkUserSession();
   }
 
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup,
-    });
-  }
-
-  login() {
-    this.setState({
-      loggedIn: !this.state.loggedIn,
     });
   }
 
@@ -64,8 +69,8 @@ class App extends React.Component {
             render={() => (
               <NavBar
                 togglePopup={this.togglePopup.bind(this)}
-                loggedIn={this.state.loggedIn}
-                logout={this.login.bind(this)}
+                currentUser={this.state.currentUser}
+                logout={this.userLogOut}
               />
             )}
           />
@@ -77,11 +82,10 @@ class App extends React.Component {
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
           </Switch>
-          {/* <button onClick={this.login.bind(this)}>Sign-in</button> */}
           {this.state.showPopup && (
             <Popup
               closePopup={this.togglePopup.bind(this)}
-              login={this.login.bind(this)}
+              login={this.checkUserSession}
             />
           )}
         </div>

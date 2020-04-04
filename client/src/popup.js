@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import "./App.css";
-import { login, logout } from "./actions/session";
+import { login } from "./actions/session";
 import { addUser } from "./actions/user";
 import {
-  withStyles,
   Grid,
   TextField,
   Button,
-  Typography,
 } from "@material-ui/core";
 import { useInput } from "./components/Utility"
 
@@ -29,16 +27,15 @@ class Popup extends React.Component {
           {this.state.signUp ? (
             <SignUpForm
               toggle={this.toggleSignUp.bind(this)}
-              login={this.props.login}
-              closePopup={this.props.closePopup}
+              afterSubmit={() => {this.props.closePopup(); this.props.login();}}
             />
           ) : (
             <SignInForm
               toggle={this.toggleSignUp.bind(this)}
-              login={this.props.login}
+              afterSubmit={ () => {this.props.closePopup(); this.props.login();}}
             />
           )}
-          <button onClick={this.props.closePopup}>close</button>
+          <Button onClick={this.props.closePopup}>close</Button>
         </div>
       </div>
     );
