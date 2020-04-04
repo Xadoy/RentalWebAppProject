@@ -61,6 +61,10 @@ const ItemSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  dailyCost: {
+    type: Number,
+    default: 1
+  },
   comments: [CommentSchema],
   image: imageSchema
 });
