@@ -81,6 +81,7 @@ class App extends React.Component {
             <Route path={"/item/:item_id"} exact strict component={Item} />
             <Route path={"/search"} component={SearchResults} />
             <Route path={"/admin"} exact strict render={() => <Admin />} />
+            <Route render={() => <div>404 Not found</div>} />
           </Switch>
           {this.state.showPopup && (
             <Popup
