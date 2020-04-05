@@ -36,6 +36,7 @@ export function ListingsTable({ rows, removeListing }) {
           <TableRow>
             <StyledCell>Items</StyledCell>
             <StyledCell align="right">Total Owned</StyledCell>
+            <StyledCell align="right">Daily Cost</StyledCell>
             <StyledCell align="right">Rented Out</StyledCell>
             <StyledCell align="right">In Stock</StyledCell>
             <StyledCell align="right">Due</StyledCell>
@@ -49,6 +50,7 @@ export function ListingsTable({ rows, removeListing }) {
                 {row.name}
               </StyledCell>
               <StyledCell align="right">{row.totalNum}</StyledCell>
+              <StyledCell align="right">{row.dailyCost}</StyledCell>
               <StyledCell align="right">{row.rentNum}</StyledCell>
               <StyledCell align="right">{row.stockNum}</StyledCell>
               <StyledCell align="right">{row.dueNum}</StyledCell>
@@ -116,8 +118,9 @@ export function RequestTable({ rows, approveRequest }) {
         <TableHead>
           <TableRow>
             <StyledCell>Items</StyledCell>
-            <StyledCell align="right">Request Count</StyledCell>
-            <StyledCell align="right">Price</StyledCell>
+            <StyledCell align="right">Description</StyledCell>
+            <StyledCell align="right">Daily Cost</StyledCell>
+            <StyledCell align="right">Total Num to Own</StyledCell>
             <StyledCell align="center">edit</StyledCell>
           </TableRow>
         </TableHead>
@@ -127,12 +130,13 @@ export function RequestTable({ rows, approveRequest }) {
               <StyledCell component="th" scope="row">
                 {row.name}
               </StyledCell>
-              <StyledCell align="right">{row.request_count}</StyledCell>
-              <StyledCell align="right">{row.price}</StyledCell>
+              <StyledCell align="right">{row.description}</StyledCell>
+              <StyledCell align="right">{row.dailyCost}</StyledCell>
+              <StyledCell align="right">{row.totalNum}</StyledCell>
               <StyledCell align="center">
                 <Button
                   color="secondary"
-                  onClick={() => approveRequest(row.name)}
+                  onClick={() => approveRequest(row)}
                 >
                   approve
                 </Button>

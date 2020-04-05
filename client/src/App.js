@@ -80,7 +80,7 @@ class App extends React.Component {
             <Route path={"/about"} exact strict component={About} />
             <Route path={"/item/:item_id"} exact strict component={Item} />
             <Route path={"/search"} component={SearchResults} />
-            <Route path={"/admin"} exact strict render={() => <Admin />} />
+            <Route path={"/admin"} exact strict render={() => this.state.currentUser && this.state.currentUser === 'admin' ? <Admin /> : <div>401 No Access</div>} />
             <Route render={() => <div>404 Not found</div>} />
           </Switch>
           {this.state.showPopup && (

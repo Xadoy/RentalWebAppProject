@@ -48,12 +48,13 @@ exports.getAllValidItems = (req, res) => {
 
 exports.addItem = (req, res) => {
   // Create a new item
-  const { name, description, totalNum, image } = req.body;
+  const { name, description, totalNum, dailyCost, image } = req.body;
   const comments = [];
   const item = new Item({
     name,
     description,
     totalNum,
+    dailyCost,
     comments,
     image,
   });

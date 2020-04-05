@@ -6,11 +6,12 @@ import {
   Button,
   Typography
 } from "@material-ui/core";
-import { RequestTable } from "./Table";
 import ErrorBoundary from "../ErrorBoundary";
 import Sidebar from "./SideBar";
 import ListingsView from "./ListingsView";
 import UserManagementView from "./UserManagementView";
+import RequestsView from "./RequestsView";
+
 import "./styles.css";
 
 const StyledForm = withStyles(theme => ({
@@ -82,36 +83,36 @@ class ManageView extends React.Component {
   }
 }
 
-function createRequestRow(name, request_count, price) {
-  return { name, request_count, price };
-}
-class RequestsView extends React.Component {
-  state = {
-    requests: [
-      createRequestRow("Rune Scimitar", 200, 100),
-      createRequestRow("Rune 2 Handed Sword", 250, 98),
-      createRequestRow("White Party Hat", 300, 16),
-      createRequestRow("Saradomin Platebody", 305, 3),
-      createRequestRow("Royal Gala Apple", 356, 16)
-    ]
-  };
-  approveRequest(name) {
-    this.setState({
-      requests: this.state.requests.filter(r => r.name !== name)
-    });
-  }
-  render() {
-    return (
-      <>
-        <Typography variant="h5">RequestsView</Typography>
-        <RequestTable
-          rows={this.state.requests}
-          approveRequest={this.approveRequest.bind(this)}
-        />
-      </>
-    );
-  }
-}
+// function createRequestRow(name, request_count, price) {
+//   return { name, request_count, price };
+// }
+// class RequestsView extends React.Component {
+//   state = {
+//     requests: [
+//       createRequestRow("Rune Scimitar", 200, 100),
+//       createRequestRow("Rune 2 Handed Sword", 250, 98),
+//       createRequestRow("White Party Hat", 300, 16),
+//       createRequestRow("Saradomin Platebody", 305, 3),
+//       createRequestRow("Royal Gala Apple", 356, 16)
+//     ]
+//   };
+//   approveRequest(name) {
+//     this.setState({
+//       requests: this.state.requests.filter(r => r.name !== name)
+//     });
+//   }
+//   render() {
+//     return (
+//       <>
+//         <Typography variant="h5">RequestsView</Typography>
+//         <RequestTable
+//           rows={this.state.requests}
+//           approveRequest={this.approveRequest.bind(this)}
+//         />
+//       </>
+//     );
+//   }
+// }
 
 class AdminPanel extends React.Component {
   state = {

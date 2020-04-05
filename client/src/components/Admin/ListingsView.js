@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { getAllValidItems, addItem, delItem } from "../../actions/item";
 import { ListingsTable } from "./Table";
@@ -7,17 +6,17 @@ import {
   Grid,
   TextField,
   Button,
-  Typography
+  Typography,
 } from "@material-ui/core";
-import { useInput } from "../Utility"
+import { useInput } from "../Utility";
 
-const StyledForm = withStyles(theme => ({
+const StyledForm = withStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
-      width: 200
-    }
-  }
+      width: 200,
+    },
+  },
 }))(Grid);
 
 // reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
@@ -27,32 +26,39 @@ function AddListingForm({ afterSubmit }) {
   const {
     value: totalNum,
     bind: bindTotalNum,
-    reset: resetTotalNum
+    reset: resetTotalNum,
+  } = useInput("");
+  const {
+    value: dailyCost,
+    bind: bindDailyCost,
+    reset: resetDailyCost,
   } = useInput("");
   const {
     value: description,
     bind: bindDescription,
-    reset: resetDescription
+    reset: resetDescription,
   } = useInput("");
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const image = {
-      image_url: "http://res.cloudinary.com/dhjsvs4sg/image/upload/v1585792310/Mystery_Item_530x_2x_msqahv.png",
-      image_id: "Mystery_Item_530x_2x_msqahv"
-    }
+      image_url:
+        "http://res.cloudinary.com/dhjsvs4sg/image/upload/v1585792310/Mystery_Item_530x_2x_msqahv.png",
+      image_id: "Mystery_Item_530x_2x_msqahv",
+    };
     const item = {
       name,
       totalNum,
       description,
-      image
+      image,
     };
-    const response = await addItem(item).catch(error =>
+    const response = await addItem(item).catch((error) =>
       setError(error.response.data)
     );
     resetName();
     resetTotalNum();
     resetDescription();
+    resetDailyCost();
     afterSubmit();
   };
   if (error) throw error;
@@ -70,6 +76,12 @@ function AddListingForm({ afterSubmit }) {
         name="new_listing_description"
         {...bindDescription}
       />
+      <TextField
+        label="Daily Cost"
+        name="new_req_cost"
+        type="number"
+        {...bindDailyCost}
+      />
       <div>
         <Button type="submit" onClick={handleSubmit}>
           Add Listing
@@ -80,20 +92,20 @@ function AddListingForm({ afterSubmit }) {
 }
 class ListingsView extends React.Component {
   state = {
-    listings: []
+    listings: [],
   };
   componentDidMount() {
     this.refreshList();
   }
 
   refreshList = () => {
-    getAllValidItems().then(items => {
+    getAllValidItems().then((items) => {
       this.setState({ listings: items });
     });
   };
 
   removeListing(id) {
-    delItem(id).then(items => {
+    delItem(id).then((items) => {
       this.refreshList();
     });
   }

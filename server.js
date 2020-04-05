@@ -19,7 +19,7 @@ const app = express();
 const env = process.env.NODE_ENV || "dev";
 // redirect to https if runing on production env
 if (env === "production") {
-  app.use(function(request, response, next) {
+  app.use(function (request, response, next) {
     if (!request.secure && request.get("x-forwarded-proto") !== "https") {
       return response.redirect("https://" + request.get("host") + request.url);
     }
@@ -42,8 +42,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       expires: 60000,
-      httpOnly: true
-    }
+      httpOnly: true,
+    },
   })
 );
 
@@ -53,13 +53,13 @@ db.mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   })
   .then(() => {
     console.log("Successfully connect to MongoDB.");
     setupDB();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("Connection error", err);
     process.exit();
   });
@@ -74,6 +74,8 @@ require("./app/routes/user.route")(app);
 require("./app/routes/item.route")(app);
 // Transaction resource route
 require("./app/routes/transaction.route")(app);
+// ItemReq resource route
+require("./app/routes/itemRequest.route")(app);
 
 /*** Webpage routes below **********************************/
 // Serve the build
@@ -99,8 +101,8 @@ const setupDB = () => {
       new User({
         userName: config.adminName,
         password: config.adminPassword,
-        isAdmin: true
-      }).save(err => {
+        isAdmin: true,
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }

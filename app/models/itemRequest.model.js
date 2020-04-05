@@ -3,6 +3,17 @@
 
 const mongoose = require("mongoose");
 
+const imageSchema = mongoose.Schema({
+  image_id: {
+    type: String,
+    required: true
+  },
+  image_url: {
+    type: String,
+    required: true
+  }
+});
+
 // Making a Mongoose model a little differently: a Mongoose Schema
 // Allows us to add additional functionality.
 const ItemRequestSchema = new mongoose.Schema(
@@ -22,7 +33,16 @@ const ItemRequestSchema = new mongoose.Schema(
     creator: {
       type: mongoose.Schema.Types.ObjectId,
       required: true
-    }
+    },
+    dailyCost: {
+      type: Number,
+      default: 1
+    },
+    totalNum: {
+      type: Number,
+      default: 0
+    },
+    image: imageSchema
   },
   { timestamps: { createdAt: "createdAt" } }
 );
