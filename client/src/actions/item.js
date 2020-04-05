@@ -36,6 +36,14 @@ export const delItem = async (id) => {
   return response;
 };
 
+export const getAllValidItemsWithKeyword = async (keyword) => {
+  // the URL for the request
+  const url = "/api/items/search/" + keyword;
+
+  const res = await axios.get(url)
+  return res.data.items
+};
+
 
 // comments:
 export const addCommentToItem = async (item_id, comment) => {

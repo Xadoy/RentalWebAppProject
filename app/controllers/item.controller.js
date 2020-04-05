@@ -5,10 +5,29 @@ const { ObjectID } = require("mongodb");
 
 exports.getItem = (req, res) => {
   const id = req.params.id;
-  Item.find({ _id: id, isRemoved: false }).populate("comments.creator", "userName -_id").then(
-    (item) => {
-      item = item[0];
-      res.send({ item });
+  Item.find({ _id: id, isRemoved: false })
+    .populate("comments.creator", "userName -_id")
+    .then(
+      (item) => {
+        item = item[0];
+        res.send({ item });
+      },
+      (error) => {
+        res.status(500).send(error); // server error
+      }
+    );
+};
+exports.getAllValidItemsWithKeyword = (req, res) => {
+  const keyword = req.params.keyword;
+  Item.find({ isRemoved: false }).then(
+    (items) => {
+      items = items.filter(
+        (item) =>
+          item.name.includes(keyword) ||
+          item.description.includes(keyword) ||
+          item.comments.some((comment) => comment.content.includes(keyword))
+      );
+      res.send({ items });
     },
     (error) => {
       res.status(500).send(error); // server error

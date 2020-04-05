@@ -10,6 +10,8 @@ module.exports = function (app) {
   app.post("/api/items", controller.addItem);
   app.delete("/api/items/:id", controller.delItem);
 
+  app.get("/api/items/search/:keyword", controller.getAllValidItemsWithKeyword);
+
   // comments
   app.get("/api/items/:id/comments", controller.getCommentsOfItem);
   app.post(
