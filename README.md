@@ -1,4 +1,10 @@
-deployed link(heroku):https://csc309-team45-notkijiji.herokuapp.com/
+# Project Structure
+* app/    -> backend nodejs codebase
+* client/ -> frontend react codebase
+
+
+# Usage
+Deployed link(heroku):https://csc309-team45-notkijiji.herokuapp.com/
 
 username and password preset:
 
