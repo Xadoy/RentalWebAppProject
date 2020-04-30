@@ -1,6 +1,14 @@
 # Project Structure
+* server.js -> entry point of backend server, setup database and express routes
 * app/    -> backend nodejs codebase
-* client/ -> frontend react codebase
+  * models/ -> data model of item/item request/transaction/user
+  * controllers/ -> control the data model
+  * routes/ -> route http requests to controllers and middlewares
+  * middlewares/ -> implements user authentication and user role identification
+* client/src/ -> frontend react codebase
+  * index.js -> entry point of frontend webpage
+  * actions/ -> perform client-server requests
+  * components/ -> react components
 
 
 # Usage
